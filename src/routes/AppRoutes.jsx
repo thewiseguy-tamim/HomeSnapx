@@ -15,7 +15,7 @@ import Cart from "../pages/home/Cart";
 import Orders from "../pages/home/Order";
 import PaymentSuccess from "../pages/home/PaymentSuccess";
 import PurchaseForm from "../pages/home/PurchaseForm";
-import Home from "../pages/home/temphome.jsx";
+import Home from "../pages/home/home.jsx";
 
 const AppRoutes = () => {
   return (
