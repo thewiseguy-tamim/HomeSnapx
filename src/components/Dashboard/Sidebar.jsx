@@ -65,7 +65,7 @@ const Sidebar = () => {
 
         {/* Sidebar footer */}
         <div className="mt-auto pt-6 text-xs text-base-content/70">
-          © 2025 PhiMart Admin
+          © 2025 HomeSnap Admin
         </div>
       </aside>
     </div>
