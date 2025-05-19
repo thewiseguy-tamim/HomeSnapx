@@ -2,6 +2,22 @@ import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import apiClient from '../../Services/api-client';
 
+// Import all available images
+import carpentryImage from '../../assets/carpentry.jpg';
+import cleaningImage from '../../assets/cleaning.jpg';
+import electricalImage from '../../assets/electrical.jpg';
+import gardeningImage from '../../assets/gardening.jpg';
+import paintingImage from '../../assets/painting.jpg';
+import plumbingImage from '../../assets/plumbing.jpg';
+
+const imageMap = {
+  1: cleaningImage,    // House Cleaning
+  2: plumbingImage,   // Plumbing
+  3: electricalImage, // Electrical
+  4: gardeningImage,  // Gardening
+  5: paintingImage,   // Painting
+  6: carpentryImage,  // Carpentry
+};
 
 const ServiceItem = ({ service }) => {
   const navigate = useNavigate();
@@ -18,8 +34,7 @@ const ServiceItem = ({ service }) => {
         navigate(`/purchase/${service.id}`);
       }
     } catch (err) {
-      console.error('Purchase check error:', err.response?.data);
-      // Default to purchase form on error
+      console.error('Purchase check error:', err.response?.data); 
       navigate(`/purchase/${service.id}`);
     }
   };
@@ -29,14 +44,15 @@ const ServiceItem = ({ service }) => {
       <div className="card bg-base-100 w-96 shadow-sm">
         <figure className="px-10 pt-10">
           <img
-            src={service.image || "https://png.pngtree.com/png-vector/20221125/ourmid/pngtree-no-image-available-icon-flatvector-illustration-picture-coming-creative-vector-png-image_40968940.jpg"}
+            src={imageMap[service.id] || "https://png.pngtree.com/png-vector/20221125/ourmid/pngtree-no-image-available-icon-flatvector-illustration-picture-coming-creative-vector-png-image_40968940.jpg"}
             alt={service.name || "Service"}
             className="rounded-xl"
+            onError={(e) => { e.target.src = "https://png.pngtree.com/png-vector/20221125/ourmid/pngtree-no-image-available-icon-flatvector-illustration-picture-coming-creative-vector-png-image_40968940.jpg"; }}
           />
         </figure>
         <div className="card-body items-center text-center">
           <h2 className="card-title">{service.name}</h2>
-          <h3 className='font-bold text-xl text-green-600'>${service.price}/month</h3>
+          <h3 className="font-bold text-xl text-green-600">${service.price}/month</h3>
           <p>{service.description}</p>
           <div className="card-actions mt-1">
             <button 
@@ -45,9 +61,6 @@ const ServiceItem = ({ service }) => {
             >
               Buy Now
             </button>
-            {/* <Link to={`/shop/${service.id}`} className="btn btn-outline btn-info">
-              View Details
-            </Link> */}
           </div>
         </div>
       </div>
