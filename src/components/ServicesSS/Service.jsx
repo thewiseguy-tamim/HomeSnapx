@@ -45,11 +45,11 @@ const Service = () => {
             ) : (
                 <Swiper
                     modules={[Navigation]}
-                    spaceBetween={10}
-                    slidesPerView={1}
+                    spaceBetween={1}
+                    slidesPerView={5}
                     breakpoints={{
-                        640: { slidesPerView: 2 },
-                        1024: { slidesPerView: 3 },
+                        640: { slidesPerView: 1 },
+                        1024: { slidesPerView: 5 },
                     }}
                     navigation
                 >
