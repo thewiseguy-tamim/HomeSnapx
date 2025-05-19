@@ -4,18 +4,18 @@ import { FiZap, FiShield, FiSmartphone } from 'react-icons/fi';
 const Features = () => {
     const features = [
         {
-            title: "Fast Performance",
-            description: "Experience lightning-fast speeds with our optimized solution.",
+            title: "Swift Service",
+            description: "Enjoy quick and efficient home solutions with our expert team.",
             icon: <FiZap className="text-indigo-600 text-4xl mb-4" />,
         },
         {
-            title: "Secure & Reliable",
-            description: "We prioritize your data safety with top-notch security.",
+            title: "Trusted & Dependable",
+            description: "We ensure your home’s safety with reliable, high-quality services.",
             icon: <FiShield className="text-indigo-600 text-4xl mb-4" />,
         },
         {
-            title: "User-Friendly Interface",
-            description: "Intuitive design for a seamless user experience.",
+            title: "Easy Booking System",
+            description: "Seamlessly book and manage services with our intuitive platform.",
             icon: <FiSmartphone className="text-indigo-600 text-4xl mb-4" />,
         },
     ];
