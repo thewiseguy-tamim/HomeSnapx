@@ -1,36 +1,47 @@
-import bgImg from "../../../assets/banner.avif";
+const CarouselSlide = ({ title, sub, image }) => {
+  return (
+    <section className="relative w-full h-[80vh] overflow-hidden">
+      {/* Background Image with Overlay */}
+      <div
+        className="absolute inset-0 bg-cover bg-center"
+        style={{ backgroundImage: `url(${image})` }}
+      >
+        <div className="absolute inset-0 bg-black/40 backdrop-blur-[2px]" />
+      </div>
 
-const CarouselSlide = ({title, sub, image}) => {
-    return (
-        <section
-            className="w-full h-[650px] bg-cover bg-center px-4 md:px-8 flex items-center justify-center"
-            style={{ backgroundImage: `url(${bgImg})` }}
-        >
-            <div className="max-w-6xl w-full flex flex-col md:flex-row items-center justify-between bg-white/90 backdrop-blur-sm rounded-xl shadow-lg p-6 md:p-10">
-                {/* Left Content */}
-                <div className="w-full md:w-1/2 text-center md:text-left">
-                    <h1 className="text-4xl md:text-5xl font-extrabold text-gray-900 leading-tight">
-                        {title}
-                    </h1>
-                    <p className="text-gray-700 mt-4 mb-6 text-lg md:text-xl">
-                       {sub}
-                    </p>
-                    <button className="btn btn-primary rounded-full px-6 py-2 text-lg shadow-lg transition-transform hover:scale-105">
-                        Book Now
-                    </button>
-                </div>
+      {/* Content Container */}
+      <div className="relative h-full max-w-7xl mx-auto px-6 md:px-8 flex items-center">
+        <div className="w-full flex flex-col md:flex-row items-center justify-between gap-12">
+          {/* Left Content */}
+          <div className="w-full md:w-1/2 text-center md:text-left animate-fadeIn">
+            <h1 className="text-4xl md:text-6xl font-bold text-white leading-tight tracking-tight">
+              {title}
+            </h1>
+            <p className="text-gray-100 mt-4 mb-8 text-lg md:text-xl font-light max-w-md">
+              {sub}
+            </p>
+            <button className="group relative overflow-hidden rounded-full bg-white px-8 py-3 text-lg font-medium text-gray-900 shadow-md transition-all duration-300 hover:shadow-lg">
+              <span className="relative z-10">Book Now</span>
+              <span className="absolute bottom-0 left-0 h-full w-0 bg-gradient-to-r from-blue-500 to-indigo-600 transition-all duration-300 group-hover:w-full"></span>
+              <span className="absolute bottom-0 left-0 h-full w-0 bg-gradient-to-r from-blue-500 to-indigo-600 opacity-70 blur-md transition-all duration-300 group-hover:w-full"></span>
+            </button>
+          </div>
 
-                {/* Right Image */}
-                <div className="w-full md:w-1/2 mt-8 md:mt-0 flex justify-center">
-                    <img
-                        src={image}
-                        alt="Cleaning service"
-                        className="max-w-sm w-full drop-shadow-xl rounded-lg"
-                    />
-                </div>
+          {/* Right Image */}
+          <div className="hidden md:block w-full md:w-1/2 animate-fadeInScale">
+            <div className="relative">
+              <div className="absolute -inset-1 rounded-xl bg-gradient-to-r from-blue-500 to-indigo-600 opacity-70 blur"></div>
+              <img
+                src={image}
+                alt="Service preview"
+                className="relative rounded-xl shadow-2xl w-full object-cover aspect-[4/3]"
+              />
             </div>
-        </section>
-    );
+          </div>
+        </div>
+      </div>
+    </section>
+  );
 };
 
 export default CarouselSlide;

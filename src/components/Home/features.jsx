@@ -1,47 +1,62 @@
-import React from 'react';
-import { FiZap, FiShield, FiSmartphone } from 'react-icons/fi';
+import { Calendar, Clock, Wrench, ChevronRight } from 'lucide-react';
 
 const Features = () => {
-    const features = [
-        {
-            title: "Swift Service",
-            description: "Enjoy quick and efficient home solutions with our expert team.",
-            icon: <FiZap className="text-indigo-600 text-4xl mb-4" />,
-        },
-        {
-            title: "Trusted & Dependable",
-            description: "We ensure your home’s safety with reliable, high-quality services.",
-            icon: <FiShield className="text-indigo-600 text-4xl mb-4" />,
-        },
-        {
-            title: "Easy Booking System",
-            description: "Seamlessly book and manage services with our intuitive platform.",
-            icon: <FiSmartphone className="text-indigo-600 text-4xl mb-4" />,
-        },
-    ];
+  const steps = [
+    {
+      icon: <Calendar className="w-10 h-10 text-primary group-hover:text-accent" />,
+      title: "Choose a Service",
+      description: "Select from our wide range of professional home services",
+    },
+    {
+      icon: <Clock className="w-10 h-10 text-primary group-hover:text-accent" />,
+      title: "Schedule a Time",
+      description: "Pick a convenient time that works with your schedule",
+    },
+    {
+      icon: <Wrench className="w-10 h-10 text-primary group-hover:text-accent" />,
+      title: "We Do the Work",
+      description: "Our verified professionals handle everything with care",
+    },
+  ];
 
-    return (
-        <section className="px-6 py-12 bg-gray-100">
-            <div className="max-w-6xl mx-auto text-center">
-                <h2 className="text-3xl font-bold mb-4">Our Features</h2>
-                <p className="text-gray-600 mb-10">
-                    Discover what makes our service stand out from the rest.
-                </p>
-                <div className="grid md:grid-cols-3 gap-8">
-                    {features.map((feature, index) => (
-                        <div
-                            key={index}
-                            className="bg-white p-6 rounded-2xl shadow hover:shadow-lg transition"
-                        >
-                            {feature.icon}
-                            <h3 className="text-xl font-semibold mb-2">{feature.title}</h3>
-                            <p className="text-gray-600">{feature.description}</p>
-                        </div>
-                    ))}
+  console.log('Features component rendered');
+
+  return (
+    <section className="py-24 px-4 bg-gradient-to-r from-blue-50 to-indigo-50 min-h-[500px] flex items-center justify-center">
+      <div className="max-w-6xl mx-auto">
+        <div className="text-center mb-12">
+          <h2 className="text-4xl md:text-5xl font-semibold text-primary mb-4 font-inter">
+            How It Works
+          </h2>
+          <p className="text-xl text-secondary max-w-2xl mx-auto leading-relaxed">
+            Get your home services done in three simple steps
+          </p>
+        </div>
+
+        <div className="grid md:grid-cols-3 gap-12 relative">
+          {steps.map((step, index) => (
+            <div
+              key={index}
+              className="relative text-center p-8 bg-bg-primary rounded-2xl shadow-md hover:shadow-lg hover:scale-102 transition-all duration-300 group"
+            >
+              <div className="relative">
+                <div className="w-16 h-16 bg-blue-50 rounded-full flex items-center justify-center mx-auto mb-6 group-hover:bg-accent group-hover:text-white transition-colors duration-300">
+                  {step.icon}
                 </div>
+                {index < steps.length - 1 && (
+                  <div className="absolute top-8 left-full w-full md:w-auto md:left-auto md:right-[-50%] flex justify-center">
+                    <ChevronRight className="w-6 h-6 text-primary group-hover:text-accent transition-colors duration-300" />
+                  </div>
+                )}
+              </div>
+              <h3 className="text-xl font-semibold text-primary mb-2 font-inter">{step.title}</h3>
+              <p className="text-secondary text-base leading-relaxed">{step.description}</p>
             </div>
-        </section>
-    );
+          ))}
+        </div>
+      </div>
+    </section>
+  );
 };
 
 export default Features;

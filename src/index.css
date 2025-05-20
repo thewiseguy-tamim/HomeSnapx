@@ -1,2 +1,50 @@
 @import "tailwindcss";
 @plugin "daisyui";
+
+@font-face {
+  font-family: 'Inter';
+  src: url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap');
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+.font-inter {
+  font-family: 'Inter', sans-serif;
+}
+
+.text-primary { color: var(--text-primary); }
+.text-secondary { color: var(--text-secondary); }
+.bg-primary { background-color: var(--bg-primary); }
+.bg-secondary { background-color: var(--bg-secondary); }
+.text-accent { color: var(--accent); }
+.bg-accent { background-color: var(--accent); }
+.shadow-md { box-shadow: var(--shadow); }
+.hover\:scale-102:hover { transform: scale(1.02); }
+
+.mask.mask-star {
+  background-color: #e5e7eb; /* Default gray for empty stars */
+  transition: transform 0.2s ease-in-out, background-color 0.2s ease-in-out;
+}
+
+.mask.mask-star.bg-accent {
+  background-color: #f59e0b; /* Amber color for filled stars */
+}
+
+/* Hover effect for stars */
+.mask.mask-star:hover {
+  transform: scale(1.2); /* Slight scale-up on hover */
+}
+
+/* Optional: Half-star container styling */
+.relative:hover .mask.mask-star {
+  transform: scale(1.2); /* Ensure half-star container scales uniformly */
+}
+
+/* Ensure accessibility */
+.mask.mask-star[aria-current="true"] {
+  background-color: #f59e0b; /* Highlight current rating star */
+}
+
+

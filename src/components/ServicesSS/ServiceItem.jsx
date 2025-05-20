@@ -1,8 +1,6 @@
 import React from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import apiClient from '../../Services/api-client';
-
-// Import all available images
 import carpentryImage from '../../assets/carpentry.jpg';
 import cleaningImage from '../../assets/cleaning.jpg';
 import electricalImage from '../../assets/electrical.jpg';
@@ -11,22 +9,23 @@ import paintingImage from '../../assets/painting.jpg';
 import plumbingImage from '../../assets/plumbing.jpg';
 
 const imageMap = {
-  1: cleaningImage,    // House Cleaning
-  2: plumbingImage,   // Plumbing
-  3: electricalImage, // Electrical
-  4: gardeningImage,  // Gardening
-  5: paintingImage,   // Painting
-  6: carpentryImage,  // Carpentry
+  1: cleaningImage,
+  2: plumbingImage,
+  3: electricalImage,
+  4: gardeningImage,
+  5: paintingImage,
+  6: carpentryImage,
 };
 
-const ServiceItem = ({ service }) => {
+const ServiceItem = ({ service, index }) => {
   const navigate = useNavigate();
+  const isOnSale = index === 2; // Mock sale status for demo
+  const originalPrice = isOnSale ? (service.price * 1.6).toFixed(2) : null;
 
-  const handleBuyNow = async () => {
+  const handleBookNow = async () => {
     try {
       const token = localStorage.getItem('access_token');
       const headers = token ? { Authorization: `JWT ${token}` } : {};
-      
       const response = await apiClient.get('/api/purchase/check/', { headers });
       if (response.data.has_purchased) {
         navigate(`/shop/${service.id}`);
@@ -34,34 +33,66 @@ const ServiceItem = ({ service }) => {
         navigate(`/purchase/${service.id}`);
       }
     } catch (err) {
-      console.error('Purchase check error:', err.response?.data); 
+      console.error('Purchase check error:', err.response?.data);
       navigate(`/purchase/${service.id}`);
     }
   };
 
   return (
-    <div className="flex justify-center items-center">
-      <div className="card bg-base-100 w-96 shadow-sm">
-        <figure className="px-10 pt-10">
+    <div className="group cursor-pointer flex flex-col h-full">
+      {/* Product Image */}
+      <div className="relative mb-4">
+        {isOnSale && (
+          <span className="absolute top-3 left-3 bg-red-500 text-white text-xs px-2 py-1 rounded z-10">
+            sale
+          </span>
+        )}
+        <div className="aspect-square overflow-hidden rounded-lg bg-gray-100">
           <img
-            src={imageMap[service.id] || "https://png.pngtree.com/png-vector/20221125/ourmid/pngtree-no-image-available-icon-flatvector-illustration-picture-coming-creative-vector-png-image_40968940.jpg"}
-            alt={service.name || "Service"}
-            className="rounded-xl"
-            onError={(e) => { e.target.src = "https://png.pngtree.com/png-vector/20221125/ourmid/pngtree-no-image-available-icon-flatvector-illustration-picture-coming-creative-vector-png-image_40968940.jpg"; }}
+            src={imageMap[service.id] || '/api/placeholder/300/300'}
+            alt={service.name || 'Service'}
+            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+            loading="lazy"
           />
-        </figure>
-        <div className="card-body items-center text-center">
-          <h2 className="card-title">{service.name}</h2>
-          <h3 className="font-bold text-xl text-green-600">${service.price}/month</h3>
-          <p>{service.description}</p>
-          <div className="card-actions mt-1">
-            <button 
-              className="btn btn-primary"
-              onClick={handleBuyNow}
-            >
-              Buy Now
-            </button>
-          </div>
+        </div>
+      </div>
+
+      {/* Product Info */}
+      <div className="flex flex-col flex-grow space-y-2">
+        <h3 className="text-sm font-medium text-gray-900 group-hover:text-gray-600 transition-colors">
+          {service.name}
+        </h3>
+        
+        <div className="flex items-center space-x-2">
+          {isOnSale ? (
+            <>
+              <span className="text-sm font-medium text-red-500">
+                Now ${service.price}/month
+              </span>
+              <span className="text-sm text-gray-400 line-through">
+                Was ${originalPrice}/month
+              </span>
+            </>
+          ) : (
+            <span className="text-sm font-medium text-gray-900">
+              ${service.price}/month
+            </span>
+          )}
+        </div>
+
+        {/* Service Description with truncation */}
+        <p className="text-sm text-gray-600 line-clamp-3 flex-grow">
+          {service.description || 'Professional service to meet your needs.'}
+        </p>
+
+        {/* Book Now Button - Slightly visible, aligned at bottom */}
+        <div className="mt-auto opacity-30 group-hover:opacity-100 transition-opacity duration-300 pt-4">
+          <button
+            onClick={handleBookNow}
+            className="w-full bg-black text-white text-sm py-2 px-4 rounded hover:bg-gray-800 transition-colors"
+          >
+            Book Now
+          </button>
         </div>
       </div>
     </div>
