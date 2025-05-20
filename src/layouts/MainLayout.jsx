@@ -7,8 +7,8 @@ const MainLayout = () => {
     return (
         <>
             <NavBar />
-            <Outlet/>
-            <Footer/>
+            <Outlet />
+            <Footer />
         </>
     );
 };

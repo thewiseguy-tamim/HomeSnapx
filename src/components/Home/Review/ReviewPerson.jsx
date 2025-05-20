@@ -3,6 +3,7 @@ import { ChevronLeft, ChevronRight, Star } from 'lucide-react';
 import women from "../../../assets/women.png";
 import man from "../../../assets/man.webp";
 import man1 from "../../../assets/man2.jpeg";
+import backgroundImage from '../../../assets/bgg.jpg'; // Import the background image
 
 const TestimonialSlider = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
@@ -66,7 +67,15 @@ const TestimonialSlider = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-100 flex items-center justify-center p-4">
+    <div
+      className="min-h-screen flex items-center justify-center p-4"
+      style={{
+        backgroundImage: `url(${backgroundImage})`,
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+        backgroundAttachment: 'fixed', // Optional: for parallax effect
+      }}
+    >
       <div className="max-w-4xl w-full">
         {/* Header */}
         <div className="text-center mb-8">

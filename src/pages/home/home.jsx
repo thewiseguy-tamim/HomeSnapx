@@ -4,17 +4,14 @@ import Features from "../../components/Home/features";
 import ReviewPerson from "../../components/Home/Review/ReviewPerson";
 import Service from "../../components/ServicesSS/Service";
 
-
-
 const Home = () => {
   return (
     <div>
-      {/* <Hero /> */}
-    <HeroCarousel/>
-    <Features/>
-    <Service/>
-    <ReviewPerson/>
-    <DiscountSection/>
+      <HeroCarousel />
+      <Features />
+      <Service />
+      <ReviewPerson />
+      <DiscountSection />
     </div>
   );
 };

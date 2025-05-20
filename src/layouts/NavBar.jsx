@@ -51,7 +51,7 @@ const NavBar = () => {
             >
               <li><Link to="/">Homepage</Link></li>
               <li><Link to="/shop">Shop</Link></li>
-              <li><a>About</a></li>
+              <li><Link to="/about">About</Link></li>
             </ul>
           </div>
           <a className="btn btn-ghost text-xl font-bold">
@@ -62,7 +62,7 @@ const NavBar = () => {
           <ul className="menu menu-horizontal px-1 font-bold">
             <li><Link to="/">Homepage</Link></li>
             <li><Link to="/shop">Shop</Link></li>
-            <li><a>About</a></li>
+            <li><Link to="/about">About</Link></li>
           </ul>
         </div>
         <div className="navbar-end flex items-center gap-2">
@@ -88,7 +88,7 @@ const NavBar = () => {
             </div>
             <div
               tabIndex={0}
-              className="card card-compact dropdown-content bg-base-100 z-[1] mt- personally identifiable information3 w-52 shadow font-bold"
+              className="card card-compact dropdown-content bg-base-100 z-[1] mt-3 w-52 shadow font-bold"
             >
               <div className="card-body">
                 <span className="text-lg font-bold">{itemCount} Items</span>

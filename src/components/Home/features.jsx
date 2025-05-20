@@ -1,4 +1,5 @@
 import { Calendar, Clock, Wrench, ChevronRight } from 'lucide-react';
+import backgroundImage from '../../assets/bgg.jpg'; // Import the background image
 
 const Features = () => {
   const steps = [
@@ -22,7 +23,15 @@ const Features = () => {
   console.log('Features component rendered');
 
   return (
-    <section className="py-24 px-4 bg-gradient-to-r from-blue-50 to-indigo-50 min-h-[500px] flex items-center justify-center">
+    <section
+      className="py-24 px-4 bg-gradient-to-r from-blue-50 to-indigo-50 min-h-[500px] flex items-center justify-center"
+      style={{
+        backgroundImage: `url(${backgroundImage})`,
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+        backgroundAttachment: 'fixed', // Optional: for parallax effect
+      }}
+    >
       <div className="max-w-6xl mx-auto">
         <div className="text-center mb-12">
           <h2 className="text-4xl md:text-5xl font-semibold text-primary mb-4 font-inter">
@@ -37,7 +46,7 @@ const Features = () => {
           {steps.map((step, index) => (
             <div
               key={index}
-              className="relative text-center p-8 bg-bg-primary rounded-2xl shadow-md hover:shadow-lg hover:scale-102 transition-all duration-300 group"
+              className="relative text-center p-8 bg-white/90 border border-gray-100 rounded-2xl shadow-lg hover:shadow-xl hover:scale-102 transition-all duration-300 group"
             >
               <div className="relative">
                 <div className="w-16 h-16 bg-blue-50 rounded-full flex items-center justify-center mx-auto mb-6 group-hover:bg-accent group-hover:text-white transition-colors duration-300">

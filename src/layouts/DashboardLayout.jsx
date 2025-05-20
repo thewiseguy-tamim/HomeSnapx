@@ -11,7 +11,7 @@ const DashboardLayout = () => {
   };
 
   return (
-    <div className="drawer lg:drawer-open">
+    <div className="drawer lg:drawer-open min-h-screen bg-gradient-to-br from-slate-50 to-blue-50">
       {/* Mobile drawer checkbox */}
       <input
         id="drawer-toggle"
@@ -22,13 +22,17 @@ const DashboardLayout = () => {
       />
 
       {/* Page content */}
-      <div className="drawer-content flex flex-col">
+      <div className="drawer-content flex flex-col min-h-screen">
         {/* Navbar */}
         <Navbar sidebarOpen={sidebarOpen} />
 
         {/* Main content */}
-        <main className="p-6">
-          <Outlet />
+        <main className="flex-1 p-8 lg:p-10 text-xl">
+          <div className="max-w-8xl mx-auto">
+            <div className="dashboard-content">
+              <Outlet />
+            </div>
+          </div>
         </main>
       </div>
 

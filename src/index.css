@@ -14,15 +14,35 @@ body {
   font-family: 'Inter', sans-serif;
 }
 
-.text-primary { color: var(--text-primary); }
-.text-secondary { color: var(--text-secondary); }
-.bg-primary { background-color: var(--bg-primary); }
-.bg-secondary { background-color: var(--bg-secondary); }
-.text-accent { color: var(--accent); }
-.bg-accent { background-color: var(--accent); }
-.shadow-md { box-shadow: var(--shadow); }
-.hover\:scale-102:hover { transform: scale(1.02); }
+/* Text and background utility classes */
+.text-primary {
+  color: var(--text-primary);
+}
+.text-secondary {
+  color: var(--text-secondary);
+}
+.bg-primary {
+  background-color: var(--bg-primary);
+}
+.bg-secondary {
+  background-color: var(--bg-secondary);
+}
+.text-accent {
+  color: var(--accent);
+}
+.bg-accent {
+  background-color: var(--accent);
+}
 
+/* Shadow and hover effects */
+.shadow-md {
+  box-shadow: var(--shadow);
+}
+.hover\:scale-102:hover {
+  transform: scale(1.02);
+}
+
+/* Star rating mask styles */
 .mask.mask-star {
   background-color: #e5e7eb; /* Default gray for empty stars */
   transition: transform 0.2s ease-in-out, background-color 0.2s ease-in-out;
@@ -42,9 +62,10 @@ body {
   transform: scale(1.2); /* Ensure half-star container scales uniformly */
 }
 
-/* Ensure accessibility */
+/* Accessibility: Highlight current rating star */
 .mask.mask-star[aria-current="true"] {
-  background-color: #f59e0b; /* Highlight current rating star */
+  background-color: #f59e0b;
 }
+
 
 
