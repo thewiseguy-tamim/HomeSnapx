@@ -1,4 +1,4 @@
-import { FiMenu, FiX, FiBell, FiSearch } from "react-icons/fi";
+import { FiMenu, FiX, FiBell, FiSearch, FiUser, FiSettings, FiLogOut } from "react-icons/fi";
 import { Link } from "react-router-dom";
 import useAuthContext from "../../hooks/useAuthContext";
 
@@ -16,31 +16,21 @@ const Navbar = ({ sidebarOpen }) => {
           )}
         </label>
       </div>
-      
+
       <div className="flex-1">
-        <h2 className="text-xl font-bold text-slate-800 tracking-tight">
-          
-        </h2>
+        <h2 className="text-xl font-bold text-slate-800 tracking-tight"></h2>
       </div>
 
       <div className="flex-none gap-3">
         {/* Search button */}
-        <button className="btn btn-ghost btn-circle hover:bg-blue-50 transition-colors duration-200">
+        {/* <button className="btn btn-ghost btn-circle hover:bg-blue-50 transition-colors duration-200">
           <FiSearch className="h-5 w-5 text-slate-600" />
-        </button>
-
-        {/* Notifications */}
-        <button className="btn btn-ghost btn-circle hover:bg-blue-50 transition-colors duration-200 relative">
-          <FiBell className="h-5 w-5 text-slate-600" />
-          <span className="absolute -top-1 -right-1 h-4 w-4 bg-red-500 text-white text-xs rounded-full flex items-center justify-center">
-            3
-          </span>
-        </button>
+        </button> */}
 
         {/* User dropdown */}
-        <div className="dropdown dropdown-end">
-          <label tabIndex={0} className="btn btn-ghost btn-circle avatar hover:ring-2 hover:ring-blue-200 transition-all duration-200">
-            <div className="w-10 rounded-full ring-2 ring-white shadow-lg">
+        <div className="relative group">
+          <label className="btn btn-ghost btn-circle avatar hover:ring-2 hover:ring-blue-200 transition-all duration-200">
+            <div className="w-12 rounded-full ring-2 ring-white shadow-lg">
               <img
                 alt="User avatar"
                 src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp"
@@ -48,42 +38,42 @@ const Navbar = ({ sidebarOpen }) => {
               />
             </div>
           </label>
-          <ul
-            tabIndex={0}
-            className="menu menu-sm dropdown-content mt-3 z-[1] p-3 shadow-xl bg-white rounded-xl border border-slate-200 w-56"
-          >
-            <li className="mb-2">
-              <div className="text-sm font-medium text-slate-700 px-3 py-2 bg-slate-50 rounded-lg mb-2">
-                Welcome back!
+          <div className="absolute right-0 mt-3 w-56 dropdown-modern rounded-xl p-2 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 bg-white border border-slate-200 shadow-xl">
+            <div className="px-3 py-2 text-sm font-medium text-slate-700 bg-gradient-to-r from-blue-50 to-purple-50 rounded-lg mb-2">
+              Welcome back! 👋
+            </div>
+
+            <Link
+              to="/dashboard/profile"
+              className="menu-item-hover flex items-center justify-between px-3 py-2 text-sm text-slate-700 rounded-lg hover:bg-blue-50 transition-colors duration-200"
+            >
+              <div className="flex items-center space-x-2">
+                <FiUser size={16} />
+                <span>Profile</span>
               </div>
-            </li>
-            <li>
-              <Link 
-                to="/dashboard/profile" 
-                className="flex items-center justify-between py-3 px-3 hover:bg-blue-50 rounded-lg transition-colors duration-200 text-slate-700"
-              >
-                <span className="font-medium">Profile</span>
-                <span className="badge badge-primary badge-sm">New</span>
-              </Link>
-            </li>
-            <li>
-              <Link 
-                to="/" 
-                className="py-3 px-3 hover:bg-blue-50 rounded-lg transition-colors duration-200 text-slate-700 font-medium"
-              >
-                Home
-              </Link>
-            </li>
-            <div className="divider my-2"></div>
-            <li>
-              <button 
-                onClick={logoutUser} 
-                className="w-full text-left py-3 px-3 hover:bg-red-50 rounded-lg transition-colors duration-200 text-red-600 font-medium"
-              >
-                Logout
-              </button>
-            </li>
-          </ul>
+              <span className="bg-gradient-to-r from-blue-500 to-purple-600 text-white text-xs px-2 py-1 rounded-full">
+                New
+              </span>
+            </Link>
+
+            <Link
+              to="/"
+              className="menu-item-hover flex items-center space-x-2 px-3 py-2 text-sm text-slate-700 rounded-lg hover:bg-blue-50 transition-colors duration-200"
+            >
+              <FiSettings size={16} />
+              <span>Home</span>
+            </Link>
+
+            <div className="border-t border-slate-200 my-2"></div>
+
+            <button
+              onClick={logoutUser}
+              className="w-full menu-item-hover flex items-center space-x-2 px-3 py-2 text-sm text-red-600 rounded-lg hover:bg-red-50 transition-colors duration-200"
+            >
+              <FiLogOut size={16} />
+              <span>Logout</span>
+            </button>
+          </div>
         </div>
       </div>
     </div>

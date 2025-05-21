@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import ServiceItem from './ServiceItem';
 import ErrorAlert from '../ErrorAlert';
 import apiClient from '../../Services/api-client';
-import backgroundImage from '../../assets/bgg.jpg'; // Import the background image
+import backgroundImage from '../../assets/bgg.jpg'; 
 
 const Service = () => {
   const [services, setServices] = useState([]);
@@ -31,7 +31,7 @@ const Service = () => {
         backgroundImage: `url(${backgroundImage})`,
         backgroundSize: 'cover',
         backgroundPosition: 'center',
-        backgroundAttachment: 'fixed', // Optional: for parallax effect
+        backgroundAttachment: 'fixed', 
       }}
     >
       <div className="max-w-7xl mx-auto px-4 md:px-8">
