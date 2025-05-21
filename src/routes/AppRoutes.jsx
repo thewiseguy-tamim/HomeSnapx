@@ -16,6 +16,7 @@ import Orders from "../pages/home/Order";
 import PaymentSuccess from "../pages/home/PaymentSuccess";
 import PurchaseForm from "../pages/home/PurchaseForm";
 import Home from "../pages/home/home.jsx";
+import Contact from "../pages/home/Contact";
 
 const AppRoutes = () => {
   return (
@@ -30,6 +31,7 @@ const AppRoutes = () => {
         <Route path="activate/:uid/:token" element={<ActivateAccount />} />
         <Route path="shop/:id" element={<ServiceDetail />} />
         <Route path="/purchase/:serviceId" element={<PurchaseForm />} />
+        <Route path="/contact" element={<Contact />} />
       </Route>
 
       {/* Private Routes */}

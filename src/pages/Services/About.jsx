@@ -1,5 +1,8 @@
 import React from 'react';
 import { CheckCircle, Users, Award, Clock } from 'lucide-react';
+import TM1 from '../../assets/TM1.jpeg';
+import TM2 from '../../assets/TM2.jpg';
+import TM3 from '../../assets/TM3.jpeg';
 
 const About = () => {
   const stats = [
@@ -25,6 +28,12 @@ const About = () => {
       description: 'Our skilled professionals are trained, certified, and passionate about delivering excellence.',
       icon: Users
     }
+  ];
+
+  const teamMembers = [
+    { name: 'Team Member 1', role: 'Service Specialist', image: TM1 },
+    { name: 'Team Member 2', role: 'Service Specialist', image: TM2 },
+    { name: 'Team Member 3', role: 'Service Specialist', image: TM3 }
   ];
 
   return (
@@ -136,15 +145,15 @@ const About = () => {
             expertise, dedication, and a commitment to delivering exceptional service to your home.
           </p>
           <div className="grid md:grid-cols-3 gap-8">
-            {[1, 2, 3].map((member, index) => (
+            {teamMembers.map((member, index) => (
               <div key={index} className="bg-gray-50 rounded-lg p-6">
                 <img 
-                  src={`/api/placeholder/150/150`} 
-                  alt="Team member" 
+                  src={member.image} 
+                  alt={member.name} 
                   className="w-24 h-24 rounded-full mx-auto mb-4 object-cover"
                 />
-                <h3 className="text-lg font-semibold text-gray-900 mb-1">Team Member {member}</h3>
-                <p className="text-blue-500 mb-3">Service Specialist</p>
+                <h3 className="text-lg font-semibold text-gray-900 mb-1">{member.name}</h3>
+                <p className="text-blue-500 mb-3">{member.role}</p>
                 <p className="text-gray-600 text-sm">
                   Dedicated to providing exceptional service and ensuring customer satisfaction.
                 </p>
