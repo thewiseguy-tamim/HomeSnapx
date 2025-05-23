@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import ServiceItem from './ServiceItem';
-import ErrorAlert from '../ErrorAlert';
+
 import apiClient from '../../Services/api-client';
 import backgroundImage from '../../assets/bgg.jpg'; 
-
+import { Import } from 'lucide-react';
+import ServiceAlert from '../ServiceAlert';
 const Service = () => {
   const [services, setServices] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -51,7 +52,7 @@ const Service = () => {
             <div className="animate-spin rounded-full h-12 w-12 border-2 border-gray-300 border-t-black"></div>
           </div>
         ) : error ? (
-          <ErrorAlert message={error} />
+          <ServiceAlert message={error} />
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
             {services.slice(0, 4).map((service, index) => (

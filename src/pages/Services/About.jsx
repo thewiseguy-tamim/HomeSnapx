@@ -1,5 +1,6 @@
 import React from 'react';
 import { CheckCircle, Users, Award, Clock } from 'lucide-react';
+import { Link } from 'react-router-dom'; // Import Link from react-router-dom
 import TM1 from '../../assets/TM1.jpeg';
 import TM2 from '../../assets/TM2.jpg';
 import TM3 from '../../assets/TM3.jpeg';
@@ -176,9 +177,12 @@ const About = () => {
             <button className="bg-white text-blue-600 px-8 py-3 rounded-lg font-semibold hover:bg-gray-100 transition-colors w-full sm:w-auto">
               Get Free Quote
             </button>
-            <button className="border-2 border-white text-white px-8 py-3 rounded-lg font-semibold hover:bg-white hover:text-blue-600 transition-colors w-full sm:w-auto">
+            <Link 
+              to="/contact" 
+              className="border-2 border-white text-white px-8 py-3 rounded-lg font-semibold hover:bg-white hover:text-blue-600 transition-colors w-full sm:w-auto inline-block"
+            >
               Contact Us
-            </button>
+            </Link>
           </div>
         </div>
       </section>
