@@ -29,7 +29,7 @@ const NavBar = () => {
     { name: 'Home', path: '/', icon: Home },
     { name: 'Services', path: '/shop', icon: Wrench },
     { name: 'About', path: '/about', icon: Info },
-    { name: 'Contact', path: '/contact', icon: Phone },
+    { name: 'Contact Us', path: '/contact', icon: Phone },
   ];
 
   return (

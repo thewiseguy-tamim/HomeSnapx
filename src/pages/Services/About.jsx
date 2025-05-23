@@ -31,9 +31,9 @@ const About = () => {
   ];
 
   const teamMembers = [
-    { name: 'Team Member 1', role: 'Service Specialist', image: TM1 },
-    { name: 'Team Member 2', role: 'Service Specialist', image: TM2 },
-    { name: 'Team Member 3', role: 'Service Specialist', image: TM3 }
+    { name: 'Alisha', role: 'Service Specialist', image: TM1 },
+    { name: 'Alex', role: 'Service Specialist', image: TM2 },
+    { name: 'Dave', role: 'Service Specialist', image: TM3 }
   ];
 
   return (
