@@ -67,11 +67,13 @@ const Order = () => {
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    const fetchOrders = async () => {
+    const fetchData = async () => {
       try {
         setLoading(true);
-        const res = await authApiClient.get("/orders/");
-        const fetchedOrders = res.data.results || res.data;
+        // Fetch orders
+        const ordersRes = await authApiClient.get("/orders/");
+        const fetchedOrders = ordersRes.data.results || ordersRes.data;
+        console.log("Fetched orders:", fetchedOrders); // Debug: Log orders to check structure
         const sortedOrders = fetchedOrders.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
         setOrders(sortedOrders.slice(0, 4));
       } catch (error) {
@@ -81,7 +83,7 @@ const Order = () => {
         setLoading(false);
       }
     };
-    fetchOrders();
+    fetchData();
   }, []);
 
   const getStatusBadge = (status) => {
@@ -105,6 +107,10 @@ const Order = () => {
     return order.user?.first_name || "Unknown";
   };
 
+  const getServiceName = (order) => {
+    return order.items?.[0]?.service?.name || "Unknown";
+  };
+
   return (
     <div className="mt-6 order-card">
       <div className="card-body">
@@ -121,6 +127,7 @@ const Order = () => {
                   <th>Order ID</th>
                   <th>Transaction ID</th>
                   <th>Customer</th>
+                  <th>Service</th>
                   <th>Status</th>
                   <th>Date</th>
                   <th>Amount</th>
@@ -136,6 +143,7 @@ const Order = () => {
                         "N/A"}
                     </td>
                     <td>{getCustomerFirstName(order)}</td>
+                    <td>{getServiceName(order)}</td>
                     <td>
                       <div className={getStatusBadge(order.status)}>{order.status}</div>
                     </td>
