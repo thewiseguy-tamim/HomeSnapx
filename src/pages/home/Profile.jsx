@@ -11,7 +11,7 @@ const Profile = () => {
   const {
     register,
     handleSubmit,
-    formState: { errors },
+    formState: { errors, isSubmitting },
     watch,
   } = useForm({
     defaultValues: {
@@ -23,28 +23,33 @@ const Profile = () => {
   });
 
   const onSubmit = async (data) => {
-    const profilePayload = {
-      first_name: data.first_name,
-      last_name: data.last_name,
-      phone_number: data.phone_number,
-      profile_picture: data.profile_picture,
-    };
+    try {
+      const profilePayload = {
+        first_name: data.first_name,
+        last_name: data.last_name,
+        phone_number: data.phone_number,
+        profile_picture: data.profile_picture,
+      };
 
-    const profileRes = await updateUserProfile(profilePayload);
+      const profileRes = await updateUserProfile(profilePayload);
 
-    let passwordRes = { success: true };
-    if (data.current_password && data.new_password) {
-      passwordRes = await changePassword({
-        current_password: data.current_password,
-        new_password: data.new_password,
-      });
-    }
+      let passwordRes = { success: true };
+      if (data.current_password && data.new_password) {
+        passwordRes = await changePassword({
+          current_password: data.current_password,
+          new_password: data.new_password,
+        });
+      }
 
-    if (profileRes.success && passwordRes.success) {
-      alert("Profile updated successfully!");
-      setIsEditing(false);
-    } else {
-      alert("Update failed.");
+      if (profileRes.success && passwordRes.success) {
+        alert("Profile updated successfully!");
+        setIsEditing(false);
+      } else {
+        alert("Update failed.");
+      }
+    } catch (error) {
+      alert("An error occurred while updating the profile.");
+      console.error(error);
     }
   };
 
@@ -63,9 +68,7 @@ const Profile = () => {
           </div>
         </div>
 
-        <div 
-          className="p-8 space-y-6"
-        >
+        <form onSubmit={handleSubmit(onSubmit)} className="p-8 space-y-6">
           <div className="grid md:grid-cols-2 gap-6">
             {/* First Name */}
             <div className="form-control">
@@ -154,9 +157,9 @@ const Profile = () => {
           <ProfileButtons
             isEditing={isEditing}
             setIsEditing={setIsEditing}
-            isSubmitting={false}
+            isSubmitting={isSubmitting}
           />
-        </div>
+        </form>
       </div>
     </div>
   );
