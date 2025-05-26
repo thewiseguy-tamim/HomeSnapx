@@ -1,5 +1,6 @@
 import React from 'react';
 import { Twitter, Youtube, Facebook, Mail, Phone, MapPin, ArrowRight, Heart } from 'lucide-react';
+import { Link } from 'react-router';
 
 const Footer = () => {
     return (
@@ -280,10 +281,10 @@ const Footer = () => {
                             <div className="footer-section">
                                 <h6 className="footer-title font-inter">Company</h6>
                                 <div className="service-grid">
-                                    <a href="#" className="footer-link font-inter">About Us</a>
+                                    <Link to="/about" className="footer-link font-inter">About Us</Link>
                                     <a href="#" className="footer-link font-inter">Our Team</a>
                                     <a href="#" className="footer-link font-inter">Careers</a>
-                                    <a href="#" className="footer-link font-inter">Contact</a>
+                                    <Link to="/contact" className="footer-link font-inter">Contact</Link>
                                     <a href="#" className="footer-link font-inter">Privacy Policy</a>
                                     <a href="#" className="footer-link font-inter">Terms of Service</a>
                                 </div>
