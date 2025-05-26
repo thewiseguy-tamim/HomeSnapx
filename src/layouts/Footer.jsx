@@ -244,21 +244,21 @@ const Footer = () => {
                                         <div className="contact-icon">
                                             <Phone size={16} />
                                         </div>
-                                        <span className="text-sm">+1 (555) 123-4567</span>
+                                        <span className="text-sm">(+880) 190-200-1000</span>
                                     </div>
                                     
                                     <div className="contact-item">
                                         <div className="contact-icon">
                                             <Mail size={16} />
                                         </div>
-                                        <span className="text-sm">hello@homesnap.com</span>
+                                        <span className="text-sm">support@homesnap.com</span>
                                     </div>
                                     
                                     <div className="contact-item">
                                         <div className="contact-icon">
                                             <MapPin size={16} />
                                         </div>
-                                        <span className="text-sm">123 Service St, City, State 12345</span>
+                                        <span className="text-sm">Mirpur, Dhaka-1216</span>
                                     </div>
                                 </div>
                             </div>

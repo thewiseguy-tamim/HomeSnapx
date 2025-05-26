@@ -61,22 +61,22 @@ const Contact = () => {
     {
       icon: Phone,
       title: 'Call Us',
-      info: '+1 (555) 123-4567',
+      info: '(+880) 190-200-1000',
       subInfo: 'Mon-Fri 8AM-8PM',
       color: 'from-blue-500 to-cyan-500'
     },
     {
       icon: Mail,
       title: 'Email Us',
-      info: 'hello@homesnap.com',
+      info: 'support@homesnap.com',
       subInfo: 'We reply within 24hrs',
       color: 'from-purple-500 to-pink-500'
     },
     {
       icon: MapPin,
       title: 'Visit Us',
-      info: '123 Service Street',
-      subInfo: 'City, State 12345',
+      info: 'Mirpur, Block-A, Road-12',
+      subInfo: 'Dhaka-1216',
       color: 'from-emerald-500 to-teal-500'
     },
     {
@@ -575,7 +575,7 @@ const Contact = () => {
               className="inline-flex items-center gap-3 bg-white text-blue-600 px-8 py-4 rounded-full font-bold text-lg hover:bg-blue-50 transition-all duration-300 hover:transform hover:scale-105 font-inter"
             >
               <Phone size={24} />
-              Call Now: (555) 123-4567
+              Call Now: (+880) 190-200-1000
               <ArrowRight size={20} />
             </a>
           </div>
