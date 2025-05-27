@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { Link, NavLink } from 'react-router-dom';
 import useAuthContext from '../hooks/useAuthContext';
@@ -31,6 +32,9 @@ const NavBar = () => {
     { name: 'About', path: '/about', icon: Info },
     { name: 'Contact Us', path: '/contact', icon: Phone },
   ];
+
+  // Determine dashboard path based on user role
+  const dashboardPath = user?.role === 'admin' ? '/dashboard' : '/dashboard/client';
 
   return (
     <>
@@ -241,7 +245,7 @@ const NavBar = () => {
                     </Link>
                     
                     <Link 
-                      to="/dashboard" 
+                      to={dashboardPath} 
                       className="menu-item-hover flex items-center space-x-2 px-3 py-2 text-sm text-slate-700 rounded-lg"
                     >
                       <Settings size={16} />

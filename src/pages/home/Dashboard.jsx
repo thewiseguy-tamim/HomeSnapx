@@ -70,12 +70,13 @@ const Order = () => {
     const fetchData = async () => {
       try {
         setLoading(true);
-        // Fetch orders
+        // Fetch all orders
         const ordersRes = await authApiClient.get("/orders/");
         const fetchedOrders = ordersRes.data.results || ordersRes.data;
-        console.log("Fetched orders:", fetchedOrders); // Debug: Log orders to check structure
+        console.log("Fetched orders:", fetchedOrders);
+        // Sort orders by creation date (newest first) without slicing
         const sortedOrders = fetchedOrders.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
-        setOrders(sortedOrders.slice(0, 4));
+        setOrders(sortedOrders); // Removed .slice(0, 20)
       } catch (error) {
         console.error("Failed to fetch orders:", error);
         setError("Failed to load orders.");
@@ -114,7 +115,7 @@ const Order = () => {
   return (
     <div className="mt-6 order-card">
       <div className="card-body">
-        <h3 className="card-title text-lg text-gray-800">Recent Orders</h3>
+        <h3 className="card-title text-lg text-gray-800">All Orders</h3>
         <div className="overflow-x-auto">
           {loading ? (
             <p className="text-gray-600">Loading orders...</p>
@@ -160,7 +161,7 @@ const Order = () => {
               </tbody>
             </table>
           ) : (
-            <p className="text-gray-600">No recent orders found.</p>
+            <p className="text-gray-600">No orders found.</p>
           )}
         </div>
       </div>

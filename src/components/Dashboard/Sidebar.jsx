@@ -3,10 +3,9 @@ import {
   FiPackage,
   FiPlusCircle,
   FiShoppingCart,
-  FiStar,
   FiTag,
   FiUsers,
-  FiHome,
+  FiStar, // Added for Reviews icon
 } from "react-icons/fi";
 import { Link, useLocation } from "react-router-dom";
 import useAuthContext from "../../hooks/useAuthContext";
@@ -16,23 +15,23 @@ const Sidebar = () => {
   const location = useLocation();
 
   const customerMenus = [
-    { to: "/dashboard", icon: FiBarChart2, label: "Dashboard", color: "text-blue-600" },
+    { to: "/dashboard/client", icon: FiBarChart2, label: "Dashboard", color: "text-blue-600" },
     { to: "/dashboard/cart", icon: FiShoppingCart, label: "Cart", color: "text-green-600" },
     { to: "/dashboard/orders", icon: FiShoppingCart, label: "Orders", color: "text-purple-600" },
+    { to: "/dashboard/reviews", icon: FiStar, label: "Reviews", color: "text-yellow-600" }, 
   ];
 
-  const adminMenues = [
-    { to: "/dashboard", icon: FiBarChart2, label: "Dashboard", color: "text-blue-600" },
-    { to: "/products", icon: FiPackage, label: "Products", color: "text-indigo-600" },
-    { to: "/dashboard/products/add", icon: FiPlusCircle, label: "Add Product", color: "text-emerald-600" },
-    { to: "/categories", icon: FiTag, label: "Categories", color: "text-orange-600" },
-    { to: "/categories/add", icon: FiPlusCircle, label: "Add Category", color: "text-teal-600" },
-    { to: "/dashboard/cart", icon: FiShoppingCart, label: "Cart", color: "text-green-600" },
-    { to: "/dashboard/orders", icon: FiShoppingCart, label: "Orders", color: "text-purple-600" },
-    { to: "/users", icon: FiUsers, label: "Users", color: "text-pink-600" },
-  ];
+const adminMenus = [
+  { to: "/dashboard", icon: FiBarChart2, label: "Dashboard", color: "text-blue-600" },
+  { to: "/dashboard/services", icon: FiPackage, label: "Services", color: "text-indigo-600" }, // Updated
+  { to: "/dashboard/addService", icon: FiPlusCircle, label: "Add Service", color: "text-emerald-600" },
+  { to: "/dashboard/cart", icon: FiShoppingCart, label: "Cart", color: "text-green-600" },
+  { to: "/dashboard/orders", icon: FiShoppingCart, label: "Orders", color: "text-purple-600" },
+  { to: "/dashboard/reviews", icon: FiStar, label: "Reviews", color: "text-yellow-600" }, 
+  { to: "/dashboard/users", icon: FiUsers, label: "Users", color: "text-pink-600" },
+];
 
-  const menuItems = user.is_staff ? adminMenues : customerMenus;
+  const menuItems = user?.role === 'ADMIN' ? adminMenus : customerMenus;
 
   const isActive = (path) => {
     return location.pathname === path;
@@ -71,7 +70,7 @@ const Sidebar = () => {
                 {user?.first_name || user?.username || 'User'}
               </p>
               <p className="text-xs text-slate-500 font-medium">
-                {user?.is_staff ? 'Administrator' : ''}
+                {user?.role === 'ADMIN' ? 'Admin' : 'Client'}
               </p>
             </div>
           </div>
