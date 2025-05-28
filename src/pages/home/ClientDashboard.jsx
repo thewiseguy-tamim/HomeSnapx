@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { FiShoppingCart, FiClock, FiCheckCircle, FiDollarSign } from "react-icons/fi";
+import { FiShoppingCart, FiClock, FiCheckCircle, FiXCircle } from "react-icons/fi";
 import authApiClient from "../../Services/auth-api-client";
 
 // Add custom CSS for gradient backgrounds
@@ -12,7 +12,7 @@ const customStyles = `
   .stat-card {
     background: linear-gradient(145deg, rgba(255, 255, 255, 0.9), rgba(240, 248, 255, 0.7));
     backdrop-filter: blur(8px);
-    border: 1 cloned from xAI 1px solid rgba(255, 255, 255, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.2);
     border-radius: 12px;
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
     transition: transform 0.3s ease, box-shadow 0.3s ease;
@@ -147,7 +147,7 @@ export default function ClientDashboard() {
     totalOrders: 0,
     pendingOrders: 0,
     completedOrders: 0,
-    totalSpent: 0,
+    cancelledFailedOrders: 0,
   });
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -186,7 +186,7 @@ export default function ClientDashboard() {
             totalOrders: 0,
             pendingOrders: 0,
             completedOrders: 0,
-            totalSpent: 0,
+            cancelledFailedOrders: 0,
           });
           setOrders([]);
           return;
@@ -200,11 +200,10 @@ export default function ClientDashboard() {
         const completedOrders = userOrders.filter((order) =>
           order.status?.toUpperCase() === "COMPLETED"
         ).length;
-        const totalSpent = userOrders
-          .reduce((sum, order) => sum + parseFloat(order.total_price || 0), 0)
-          .toFixed(2);
+        const cancelledFailedOrders = userOrders.filter((order) =>
+          ["CANCELLED", "FAILED"].includes(order.status?.toUpperCase())
+        ).length;
 
-        
         const sortedOrders = userOrders
           .sort((a, b) => new Date(b.created_at || 0) - new Date(a.created_at || 0))
           .slice(0, 20);
@@ -213,7 +212,7 @@ export default function ClientDashboard() {
           totalOrders,
           pendingOrders,
           completedOrders,
-          totalSpent,
+          cancelledFailedOrders,
         });
         setOrders(sortedOrders);
       } catch (error) {
@@ -257,9 +256,9 @@ export default function ClientDashboard() {
           loading={loading}
         />
         <StatCard
-          icon={FiDollarSign}
-          title="Total Spent"
-          value={`$${stats.totalSpent}`}
+          icon={FiXCircle}
+          title="Cancelled/Failed Orders"
+          value={stats.cancelledFailedOrders}
           loading={loading}
         />
       </div>

@@ -5,7 +5,7 @@ import { useState } from "react";
 
 const Login = () => {
   const { register, handleSubmit, formState: { errors } } = useForm();
-  const { loginUser } = useAuthContext(); // Destructure loginUser here directly
+  const { loginUser } = useAuthContext(); 
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   
@@ -13,17 +13,20 @@ const Login = () => {
   const onSubmit = async (data) => {
     setLoading(true);
     try {
-      const response = await loginUser({ username: data.username, password: data.password }); // Pass the data correctly
-      console.log(response);
+      const response = await loginUser({ username: data.username, password: data.password }); 
       if (response?.success) {
-        navigate("/dashboard");
+        if (response?.user?.role === 'admin') {
+          navigate("/dashboard");
+        } else {
+          navigate("/dashboard/client");
+        }
       }
     } catch (error) {
       console.log("Login Failed", error);
     } finally {
       setLoading(false);
     }
-  };
+};
 
   return (
     <div className="flex min-h-screen items-center justify-center px-4 py-12 bg-base-200">

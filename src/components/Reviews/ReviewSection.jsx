@@ -23,7 +23,6 @@ const ReviewSection = ({ serviceId }) => {
       setReviews(res.data.results);
     } catch (error) {
       setError("Failed to load reviews");
-      console.log("Error fetching reviews:", error.response?.data || error.message);
     } finally {
       setLoading(false);
     }
@@ -36,33 +35,24 @@ const ReviewSection = ({ serviceId }) => {
       setError(null);
       fetchReviews();
     } catch (error) {
-      setError(
-        error.response?.data?.detail || "Failed to submit review"
-      );
-      console.log("Error submitting review:", error.response?.data || error.message);
+      setError(error.response?.data?.detail || "Failed to submit review");
     }
   };
 
   const checkUserPermission = async () => {
     if (!user) {
-      setError("Please log in to write a review");
       setUserCanReview(false);
       return;
     }
     try {
-      const parsedServiceId = parseInt(serviceId);
-      const res = await authApiClient.get(`/orders/has-ordered/${parsedServiceId}/`);
-      console.log("HasOrdered response:", res.data);
+      const res = await authApiClient.get(`/orders/has-ordered/${parseInt(serviceId)}/`);
       setUserCanReview(res.data.has_ordered);
       if (!res.data.has_ordered) {
         setError("You must order this service to leave a review");
-      } else {
-        setError(null); // Clear error if user can review
       }
     } catch (error) {
-      setError("Unable to check review permission: " + (error.response?.data?.detail || error.message));
+      setError("Unable to check review permission");
       setUserCanReview(false);
-      console.log("Error checking user permission:", error.response?.data || error.message);
     }
   };
 
@@ -76,10 +66,7 @@ const ReviewSection = ({ serviceId }) => {
       setError(null);
       fetchReviews();
     } catch (error) {
-      setError(
-        error.response?.data?.detail || "Failed to update review"
-      );
-      console.log("Error updating review:", error.response?.data || error.message);
+      setError("Failed to update review");
     }
   };
 
@@ -90,7 +77,6 @@ const ReviewSection = ({ serviceId }) => {
       fetchReviews();
     } catch (error) {
       setError("Failed to delete review");
-      console.log("Error deleting review:", error.response?.data || error.message);
     }
   };
 
@@ -100,66 +86,65 @@ const ReviewSection = ({ serviceId }) => {
   }, [serviceId, user]);
 
   return (
-    <div className="space-y-8 mt-10 max-w-5xl mx-auto px-4">
-      <div className="flex items-center justify-between">
-        <h2 className="text-2xl font-bold">Customer Reviews</h2>
-        <div className="badge badge-lg">
-          {reviews.length} {reviews.length === 1 ? "Review" : "Reviews"}
-        </div>
+    <div className="space-y-6 mt-8 max-w-4xl mx-auto px-4">
+      {/* Header */}
+      <div className="text-center">
+        <h2 className="text-2xl font-bold text-gray-800">Customer Reviews</h2>
+        <p className="text-gray-600 mt-1">{reviews.length} reviews</p>
       </div>
 
+      {/* Error Message */}
       {error && (
-        <div className="alert alert-warning">
-          <span>{error}</span>
+        <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg">
+          {error}
         </div>
       )}
 
+      {/* Review Form */}
       {user && userCanReview && (
-        <div className="card bg-base-100 shadow-lg border border-base-200 rounded-xl overflow-hidden">
-          <div className="card-body">
-            <h3 className="card-title text-lg">Write a Review</h3>
-            <ReviewForm onSubmit={onSubmit} />
-          </div>
+        <div className="bg-white border border-gray-200 rounded-lg p-6">
+          <h3 className="text-lg font-semibold text-gray-800 mb-4">Write a Review</h3>
+          <ReviewForm onSubmit={onSubmit} />
         </div>
       )}
 
-      {!user && !error && (
-        <div className="alert alert-info">
-          <span>Please log in to write a review.</span>
+      {/* Auth/Permission Messages */}
+      {!user && (
+        <div className="bg-blue-50 border border-blue-200 text-blue-700 px-4 py-3 rounded-lg">
+          Please log in to write a review
         </div>
       )}
 
-      {!userCanReview && user && !error && (
-        <div className="alert alert-info">
-          <span>You must order this service to leave a review.</span>
+      {user && !userCanReview && !error && (
+        <div className="bg-yellow-50 border border-yellow-200 text-yellow-700 px-4 py-3 rounded-lg">
+          You must order this service to leave a review
         </div>
       )}
 
-      <div className="divider"></div>
-
+      {/* Reviews Content */}
       {isLoading ? (
-        <div className="flex justify-center py-8">
-          <span className="loading loading-spinner loading-lg text-primary"></span>
+        <div className="text-center py-8">
+          <div className="inline-block w-8 h-8 border-4 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
+          <p className="mt-2 text-gray-600">Loading reviews...</p>
         </div>
       ) : reviews.length === 0 ? (
-        <div className="text-center py-8">
-          <div className="text-5xl mb-4">📝</div>
-          <h3 className="text-xl font-semibold mb-2">No Reviews Yet</h3>
-          <p className="text-base-content/70">
-            Be the first to review this service!
-          </p>
+        <div className="text-center py-12 bg-gray-50 rounded-lg">
+          <h3 className="text-lg font-medium text-gray-800 mb-2">No Reviews Yet</h3>
+          <p className="text-gray-600">Be the first to share your experience!</p>
         </div>
       ) : (
-        <ReviewList
-          reviews={reviews}
-          user={user}
-          editReview={editReview}
-          setEditReview={setEditReview}
-          editingId={editingId}
-          setEditingId={setEditingId}
-          handleUpdateReview={handleUpdateReview}
-          handleDeleteReview={handleDeleteReview}
-        />
+        <div className="bg-white rounded-lg border border-gray-200">
+          <ReviewList
+            reviews={reviews}
+            user={user}
+            editReview={editReview}
+            setEditReview={setEditReview}
+            editingId={editingId}
+            setEditingId={setEditingId}
+            handleUpdateReview={handleUpdateReview}
+            handleDeleteReview={handleDeleteReview}
+          />
+        </div>
       )}
     </div>
   );
