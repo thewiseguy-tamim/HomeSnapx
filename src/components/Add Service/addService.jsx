@@ -7,12 +7,26 @@ const AddService = () => {
     description: '',
     price: '',
     duration: '',
+    image: null, // Store image file
   });
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(null);
+  const [imagePreview, setImagePreview] = useState(null); // For image preview
 
   const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+    const { name, value, files } = e.target;
+    if (name === 'image') {
+      const file = files[0] || null;
+      setFormData({ ...formData, image: file });
+      // Generate image preview
+      if (file) {
+        setImagePreview(URL.createObjectURL(file));
+      } else {
+        setImagePreview(null);
+      }
+    } else {
+      setFormData({ ...formData, [name]: value });
+    }
   };
 
   const handleSubmit = async (e) => {
@@ -21,27 +35,32 @@ const AddService = () => {
     setSuccess(null);
 
     try {
-      // Convert duration to ISO 8601 format (e.g., PT1H30M for 1 hour 30 minutes)
+      // Convert duration to ISO 8601 format (e.g., PT1H30M)
       const durationParts = formData.duration.split(':');
       const hours = parseInt(durationParts[0]) || 0;
       const minutes = parseInt(durationParts[1]) || 0;
       const duration = `PT${hours}H${minutes}M`;
 
-      const payload = {
-        name: formData.name,
-        description: formData.description,
-        price: parseFloat(formData.price).toFixed(2),
-        duration,
-      };
+      // Create FormData for multipart upload
+      const payload = new FormData();
+      payload.append('name', formData.name);
+      payload.append('description', formData.description);
+      payload.append('price', parseFloat(formData.price).toFixed(2));
+      payload.append('duration', duration);
+      if (formData.image) {
+        payload.append('image', formData.image); // Append image if selected
+      }
 
       const response = await authApiClient.post('/services/', payload, {
         headers: {
-          'Content-Type': 'application/json',
+          'Content-Type': 'multipart/form-data', // Required for FormData
         },
       });
 
       setSuccess('Service added successfully!');
-      setFormData({ name: '', description: '', price: '', duration: '' });
+      setFormData({ name: '', description: '', price: '', duration: '', image: null });
+      setImagePreview(null); // Clear image preview
+      document.querySelector('input[name="image"]').value = ''; // Reset file input
     } catch (err) {
       setError(err.response?.data?.detail || 'Failed to add service');
     }
@@ -144,6 +163,38 @@ const AddService = () => {
                 />
                 <div className="absolute inset-0 bg-gradient-to-r from-indigo-500/5 to-purple-500/5 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"></div>
               </div>
+            </div>
+
+            {/* Image Upload Field */}
+            <div className="group">
+              <label className="flex items-center gap-2 text-sm font-semibold text-slate-700 mb-3">
+                <div className="w-6 h-6 bg-pink-100 rounded-lg flex items-center justify-center">
+                  <svg className="w-3 h-3 text-pink-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                  </svg>
+                </div>
+                Service Image (Optional)
+              </label>
+              <div className="relative">
+                <input
+                  type="file"
+                  name="image"
+                  accept="image/*"
+                  onChange={handleChange}
+                  className="w-full px-4 py-4 bg-white/50 backdrop-blur-sm border border-slate-200/50 rounded-2xl shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500/50 focus:border-indigo-500/50 transition-all duration-300 text-slate-700 font-medium group-hover:border-indigo-300/50"
+                />
+                <div className="absolute inset-0 bg-gradient-to-r from-indigo-500/5 to-purple-500/5 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"></div>
+              </div>
+              {imagePreview && (
+                <div className="mt-4">
+                  <p className="text-slate-600 text-sm mb-2">Image Preview:</p>
+                  <img
+                    src={imagePreview}
+                    alt="Service preview"
+                    className="w-full max-w-xs rounded-2xl shadow-sm border border-slate-200/50"
+                  />
+                </div>
+              )}
             </div>
 
             {/* Price and Duration Grid */}
