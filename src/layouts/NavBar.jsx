@@ -33,8 +33,7 @@ const NavBar = () => {
     { name: 'Contact Us', path: '/contact', icon: Phone },
   ];
 
-  // Determine dashboard path based on user role
-  const dashboardPath = user?.role === 'admin' ? '/dashboard' : '/dashboard/client';
+  const dashboardPath = user?.role === 'ADMIN' ? '/dashboard' : '/dashboard/client';
 
   return (
     <>

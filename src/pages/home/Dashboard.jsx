@@ -70,13 +70,19 @@ const Order = () => {
     const fetchData = async () => {
       try {
         setLoading(true);
-        // Fetch all orders
-        const ordersRes = await authApiClient.get("/orders/");
-        const fetchedOrders = ordersRes.data.results || ordersRes.data;
-        console.log("Fetched orders:", fetchedOrders);
-        // Sort orders by creation date (newest first) without slicing
-        const sortedOrders = fetchedOrders.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
-        setOrders(sortedOrders); // Removed .slice(0, 20)
+        // Fetch all orders with pagination
+        let allOrders = [];
+        let nextPage = "/orders/";
+        while (nextPage) {
+          const ordersRes = await authApiClient.get(nextPage);
+          const data = ordersRes.data;
+          allOrders = [...allOrders, ...(data.results || data)];
+          nextPage = data.next;
+        }
+        console.log("Fetched orders:", allOrders);
+        // Sort orders by creation date (newest first)
+        const sortedOrders = allOrders.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+        setOrders(sortedOrders);
       } catch (error) {
         console.error("Failed to fetch orders:", error);
         setError("Failed to load orders.");
@@ -88,7 +94,7 @@ const Order = () => {
   }, []);
 
   const getStatusBadge = (status) => {
-    switch (status.toUpperCase()) {
+    switch (status?.toUpperCase()) {
       case "COMPLETED":
         return "badge badge-success bg-green-500/80 text-white";
       case "PROCESSING":
@@ -184,17 +190,23 @@ export default function Dashboard() {
       try {
         setLoading(true);
 
+        // Fetch services
         const servicesRes = await authApiClient.get("/services/");
         const totalServices = (servicesRes.data.results || servicesRes.data).length;
 
+        // Fetch all orders with pagination
         let totalOrders = 0;
-        try {
-          const ordersRes = await authApiClient.get("/orders/");
-          totalOrders = (ordersRes.data.results || ordersRes.data).length;
-        } catch (orderError) {
-          console.error("Failed to fetch orders:", orderError);
+        let allOrders = [];
+        let nextPage = "/orders/";
+        while (nextPage) {
+          const ordersRes = await authApiClient.get(nextPage);
+          const data = ordersRes.data;
+          allOrders = [...allOrders, ...(data.results || data)];
+          nextPage = data.next;
         }
+        totalOrders = allOrders.length;
 
+        // Fetch users
         let totalUsers = 0;
         try {
           const usersRes = await authApiClient.get("/users/");
@@ -204,6 +216,7 @@ export default function Dashboard() {
           setUserError("Admin access required to view users.");
         }
 
+        // Fetch reviews
         const reviewsRes = await authApiClient.get("/reviews/");
         const reviews = reviewsRes.data.results || reviewsRes.data;
         const averageRating =
