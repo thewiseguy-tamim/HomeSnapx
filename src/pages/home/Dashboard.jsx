@@ -1,7 +1,5 @@
-
 import { useEffect, useState } from "react";
 import { FiPackage, FiShoppingCart, FiStar, FiUsers } from "react-icons/fi";
-import authApiClient from "../../Services/auth-api-client";
 
 // Add custom CSS for gradient backgrounds
 const customStyles = `
@@ -50,7 +48,7 @@ const styleSheet = document.createElement("style");
 styleSheet.innerText = customStyles;
 document.head.appendChild(styleSheet);
 
-const StatCard = ({ icon: Icon, title, value, loading, error }) => {
+const StatCard = ({ icon: Icon, title, value, loading }) => {
   return (
     <div className="stat-card">
       <div className="card-body p-4">
@@ -60,10 +58,6 @@ const StatCard = ({ icon: Icon, title, value, loading, error }) => {
         </div>
         {loading ? (
           <p className="mt-2 text-2xl font-bold text-gray-600">Loading...</p>
-        ) : error ? (
-          <p className="mt-2 text-sm text-indigo-700 bg-indigo-100 px-2 py-1 rounded w-fit">
-            Admin Only
-          </p>
         ) : (
           <p className="mt-2 text-2xl font-bold text-gray-900">{value}</p>
         )}
@@ -92,13 +86,14 @@ const Order = ({ statusFilter, setStatusFilter }) => {
       try {
         setLoading(true);
         let allOrders = [];
-        let nextPage = "/api/admin-orders/";
+        let nextPage = "/api/orders/";
         if (statusFilter !== "all") {
           nextPage += `?status=${statusFilter}`;
         }
         while (nextPage) {
-          const ordersRes = await authApiClient.get(nextPage);
-          const data = ordersRes.data;
+          const response = await fetch(nextPage);
+          if (!response.ok) throw new Error("Failed to fetch orders");
+          const data = await response.json();
           allOrders = [...allOrders, ...(data.results || data)];
           nextPage = data.next;
         }
@@ -109,7 +104,7 @@ const Order = ({ statusFilter, setStatusFilter }) => {
         setOrders(sortedOrders);
       } catch (error) {
         console.error("Failed to fetch orders:", error);
-        setError("Failed to load orders. Admin access may be required.");
+        setError("Failed to load orders.");
       } finally {
         setLoading(false);
       }
@@ -220,46 +215,56 @@ export default function Dashboard() {
     averageRating: 0,
   });
   const [loading, setLoading] = useState(true);
-  const [userError, setUserError] = useState(null);
+  const [error, setError] = useState(null);
   const [statusFilter, setStatusFilter] = useState("all");
 
   useEffect(() => {
     const fetchStats = async () => {
       try {
         setLoading(true);
-        const servicesRes = await authApiClient.get("/services/");
-        const totalServices = (servicesRes.data.results || servicesRes.data).length;
 
+        // Fetch services
+        const servicesRes = await fetch("/api/services/");
+        if (!servicesRes.ok) throw new Error("Failed to fetch services");
+        const servicesData = await servicesRes.json();
+        const totalServices = (servicesData.results || servicesData).length;
+
+        // Fetch orders
         let totalOrders = 0;
         let allOrders = [];
-        let nextPage = "/api/admin-orders/";
+        let nextPage = "/api/orders/";
         if (statusFilter !== "all") {
           nextPage += `?status=${statusFilter}`;
         }
         while (nextPage) {
-          const ordersRes = await authApiClient.get(nextPage);
-          const data = ordersRes.data;
+          const ordersRes = await fetch(nextPage);
+          if (!ordersRes.ok) throw new Error("Failed to fetch orders");
+          const data = await ordersRes.json();
           allOrders = [...allOrders, ...(data.results || data)];
           nextPage = data.next;
         }
         totalOrders = allOrders.length;
 
+        // Fetch users
         let totalUsers = 0;
         try {
-          const usersRes = await authApiClient.get("/users/");
-          totalUsers = (usersRes.data.results || usersRes.data).length;
+          const usersRes = await fetch("/api/users/");
+          if (!usersRes.ok) throw new Error("Failed to fetch users");
+          const usersData = await usersRes.json();
+          totalUsers = (usersData.results || usersData).length;
         } catch (error) {
           console.error("Failed to fetch users:", error);
-          setUserError("Admin access required to view users.");
+          totalUsers = 0; // Fallback to 0 if users endpoint fails
         }
 
-        const reviewsRes = await authApiClient.get("/reviews/");
-        const reviews = reviewsRes.data.results || reviewsRes.data;
+        // Fetch reviews
+        const reviewsRes = await fetch("/api/reviews/");
+        if (!reviewsRes.ok) throw new Error("Failed to fetch reviews");
+        const reviewsData = await reviewsRes.json();
+        const reviews = reviewsData.results || reviewsData;
         const averageRating =
           reviews.length > 0
-            ? (reviews.reduce((sum, review) => sum + (review.rating || 0), 0) / reviews.length).toFixed(
-                1,
-              )
+            ? (reviews.reduce((sum, review) => sum + (review.rating || 0), 0) / reviews.length).toFixed(1)
             : 0;
 
         setStats({
@@ -270,7 +275,7 @@ export default function Dashboard() {
         });
       } catch (error) {
         console.error("Failed to fetch stats:", error);
-        setUserError("Failed to load dashboard data.");
+        setError("Failed to load dashboard data.");
       } finally {
         setLoading(false);
       }
@@ -281,35 +286,31 @@ export default function Dashboard() {
   return (
     <div className="dashboard-container">
       <h1 className="text-2xl font-bold mb-6 text-gray-900">Dashboard</h1>
-      {userError && <p className="text-red-500 mb-4">{userError}</p>}
+      {error && <p className="text-red-500 mb-4">{error}</p>}
       <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
         <StatCard
           icon={FiPackage}
           title="Total Services"
           value={stats.totalServices}
           loading={loading}
-          error={userError}
         />
         <StatCard
           icon={FiShoppingCart}
           title="Total Orders"
           value={stats.totalOrders}
           loading={loading}
-          error={null}
         />
         <StatCard
           icon={FiUsers}
           title="Total Users"
           value={stats.totalUsers}
           loading={loading}
-          error={userError}
         />
         <StatCard
           icon={FiStar}
           title="Average Rating"
           value={stats.averageRating}
           loading={loading}
-          error={userError}
         />
       </div>
       <Order statusFilter={statusFilter} setStatusFilter={setStatusFilter} />
