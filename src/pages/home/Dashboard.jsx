@@ -1,3 +1,4 @@
+
 import { useEffect, useState } from "react";
 import { FiPackage, FiShoppingCart, FiStar, FiUsers } from "react-icons/fi";
 import authApiClient from "../../Services/auth-api-client";
@@ -34,6 +35,14 @@ const customStyles = `
   .table-zebra tr:hover {
     background-color: rgba(255, 255, 255, 0.2);
   }
+  .filter-select {
+    background: rgba(255, 255, 255, 0.9);
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    padding: 0.5rem;
+    font-size: 0.9rem;
+    color: #374151;
+  }
 `;
 
 // Inject styles into the document
@@ -52,7 +61,9 @@ const StatCard = ({ icon: Icon, title, value, loading, error }) => {
         {loading ? (
           <p className="mt-2 text-2xl font-bold text-gray-600">Loading...</p>
         ) : error ? (
-          <p className="mt-2 text-sm text-indigo-700 bg-indigo-100 px-2 py-1 rounded w-fit">Admin Only</p>
+          <p className="mt-2 text-sm text-indigo-700 bg-indigo-100 px-2 py-1 rounded w-fit">
+            Admin Only
+          </p>
         ) : (
           <p className="mt-2 text-2xl font-bold text-gray-900">{value}</p>
         )}
@@ -61,18 +72,30 @@ const StatCard = ({ icon: Icon, title, value, loading, error }) => {
   );
 };
 
-const Order = () => {
+const Order = ({ statusFilter, setStatusFilter }) => {
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+
+  const statusOptions = [
+    { value: "all", label: "All Statuses" },
+    { value: "PENDING", label: "Pending" },
+    { value: "PROCESSING", label: "Processing" },
+    { value: "SHIPPED", label: "Shipped" },
+    { value: "COMPLETED", label: "Completed" },
+    { value: "CANCELLED", label: "Cancelled" },
+    { value: "FAILED", label: "Failed" },
+  ];
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         setLoading(true);
-        // Fetch all orders with pagination
         let allOrders = [];
-        let nextPage = "/orders/";
+        let nextPage = "/api/admin-orders/";
+        if (statusFilter !== "all") {
+          nextPage += `?status=${statusFilter}`;
+        }
         while (nextPage) {
           const ordersRes = await authApiClient.get(nextPage);
           const data = ordersRes.data;
@@ -80,18 +103,19 @@ const Order = () => {
           nextPage = data.next;
         }
         console.log("Fetched orders:", allOrders);
-        // Sort orders by creation date (newest first)
-        const sortedOrders = allOrders.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+        const sortedOrders = allOrders.sort(
+          (a, b) => new Date(b.created_at) - new Date(a.created_at),
+        );
         setOrders(sortedOrders);
       } catch (error) {
         console.error("Failed to fetch orders:", error);
-        setError("Failed to load orders.");
+        setError("Failed to load orders. Admin access may be required.");
       } finally {
         setLoading(false);
       }
     };
     fetchData();
-  }, []);
+  }, [statusFilter]);
 
   const getStatusBadge = (status) => {
     switch (status?.toUpperCase()) {
@@ -121,7 +145,20 @@ const Order = () => {
   return (
     <div className="mt-6 order-card">
       <div className="card-body">
-        <h3 className="card-title text-lg text-gray-800">All Orders</h3>
+        <div className="flex justify-between items-center">
+          <h3 className="card-title text-lg text-gray-800">All Orders</h3>
+          <select
+            className="filter-select"
+            value={statusFilter}
+            onChange={(e) => setStatusFilter(e.target.value)}
+          >
+            {statusOptions.map((option) => (
+              <option key={option.value} value={option.value}>
+                {option.label}
+              </option>
+            ))}
+          </select>
+        </div>
         <div className="overflow-x-auto">
           {loading ? (
             <p className="text-gray-600">Loading orders...</p>
@@ -184,20 +221,21 @@ export default function Dashboard() {
   });
   const [loading, setLoading] = useState(true);
   const [userError, setUserError] = useState(null);
+  const [statusFilter, setStatusFilter] = useState("all");
 
   useEffect(() => {
     const fetchStats = async () => {
       try {
         setLoading(true);
-
-        // Fetch services
         const servicesRes = await authApiClient.get("/services/");
         const totalServices = (servicesRes.data.results || servicesRes.data).length;
 
-        // Fetch all orders with pagination
         let totalOrders = 0;
         let allOrders = [];
-        let nextPage = "/orders/";
+        let nextPage = "/api/admin-orders/";
+        if (statusFilter !== "all") {
+          nextPage += `?status=${statusFilter}`;
+        }
         while (nextPage) {
           const ordersRes = await authApiClient.get(nextPage);
           const data = ordersRes.data;
@@ -206,7 +244,6 @@ export default function Dashboard() {
         }
         totalOrders = allOrders.length;
 
-        // Fetch users
         let totalUsers = 0;
         try {
           const usersRes = await authApiClient.get("/users/");
@@ -216,12 +253,13 @@ export default function Dashboard() {
           setUserError("Admin access required to view users.");
         }
 
-        // Fetch reviews
         const reviewsRes = await authApiClient.get("/reviews/");
         const reviews = reviewsRes.data.results || reviewsRes.data;
         const averageRating =
           reviews.length > 0
-            ? (reviews.reduce((sum, review) => sum + (review.rating || 0), 0) / reviews.length).toFixed(1)
+            ? (reviews.reduce((sum, review) => sum + (review.rating || 0), 0) / reviews.length).toFixed(
+                1,
+              )
             : 0;
 
         setStats({
@@ -238,7 +276,7 @@ export default function Dashboard() {
       }
     };
     fetchStats();
-  }, []);
+  }, [statusFilter]);
 
   return (
     <div className="dashboard-container">
@@ -274,7 +312,7 @@ export default function Dashboard() {
           error={userError}
         />
       </div>
-      <Order />
+      <Order statusFilter={statusFilter} setStatusFilter={setStatusFilter} />
     </div>
   );
 }
