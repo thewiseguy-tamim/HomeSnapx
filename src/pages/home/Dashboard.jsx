@@ -225,80 +225,91 @@ export default function Dashboard() {
   const [statusFilter, setStatusFilter] = useState("all");
 
   useEffect(() => {
-    const fetchStats = async () => {
+  const fetchStats = async () => {
+    try {
+      setLoading(true);
+
+      // Fetch services
+      let totalServices = 0;
       try {
-        setLoading(true);
-
-        // Skip /api/services/ due to 404 error
-        const totalServices = 0; // Replace with valid endpoint if needed
-
-        // Fetch orders
-        let totalOrders = 0;
-        let allOrders = [];
-        let nextPage = `/api/admin-orders/${statusFilter !== "all" ? `?status=${statusFilter}` : ""}`;
-        while (nextPage) {
-          const ordersRes = await authApiClient.get(nextPage);
-          if (!ordersRes.headers["content-type"]?.includes("application/json")) {
-            console.error("Non-JSON response from admin-orders:", ordersRes.data);
-            throw new Error("Received non-JSON response from server");
-          }
-          const data = ordersRes.data;
-          allOrders = [...allOrders, ...(data.results || data)];
-          nextPage = data.next;
+        const servicesRes = await authApiClient.get("/services/");
+        if (!servicesRes.headers["content-type"]?.includes("application/json")) {
+          console.error("Non-JSON response from services:", servicesRes.data);
+          throw new Error("Received non-JSON response from server");
         }
-        totalOrders = allOrders.length;
-
-        // Fetch users (optional)
-        let totalUsers = 0;
-        try {
-          const usersRes = await authApiClient.get("/users/");
-          if (!usersRes.headers["content-type"]?.includes("application/json")) {
-            console.error("Non-JSON response from users:", usersRes.data);
-            throw new Error("Received non-JSON response from server");
-          }
-          totalUsers = (usersRes.data.results || usersRes.data).length;
-        } catch (error) {
-          console.error("Failed to fetch users:", error.message);
-          totalUsers = 0;
-        }
-
-        // Fetch reviews (optional)
-        let averageRating = 0;
-        try {
-          const reviewsRes = await authApiClient.get("/reviews/");
-          if (!reviewsRes.headers["content-type"]?.includes("application/json")) {
-            console.error("Non-JSON response from reviews:", reviewsRes.data);
-            throw new Error("Received non-JSON response from server");
-          }
-          const reviews = reviewsRes.data.results || reviewsRes.data;
-          averageRating =
-            reviews.length > 0
-              ? (reviews.reduce((sum, review) => sum + (review.rating || 0), 0) / reviews.length).toFixed(1)
-              : 0;
-        } catch (error) {
-          console.error("Failed to fetch reviews:", error.message);
-          averageRating = 0;
-        }
-
-        setStats({
-          totalServices,
-          totalOrders,
-          totalUsers,
-          averageRating,
-        });
+        totalServices = (servicesRes.data.results || servicesRes.data).length;
       } catch (error) {
-        console.error("Failed to fetch stats:", error.message);
-        setError("Failed to load dashboard data. Please try logging in again.");
-        if (error.response?.status === 401) {
-          localStorage.removeItem("authTokens");
-          window.location.href = "/login";
-        }
-      } finally {
-        setLoading(false);
+        console.error("Failed to fetch services:", error.message);
+        totalServices = 0;
       }
-    };
-    fetchStats();
-  }, [statusFilter]);
+
+      // Fetch orders
+      let totalOrders = 0;
+      let allOrders = [];
+      let nextPage = `/api/admin-orders/${statusFilter !== "all" ? `?status=${statusFilter}` : ""}`;
+      while (nextPage) {
+        const ordersRes = await authApiClient.get(nextPage);
+        if (!ordersRes.headers["content-type"]?.includes("application/json")) {
+          console.error("Non-JSON response from admin-orders:", ordersRes.data);
+          throw new Error("Received non-JSON response from server");
+        }
+        const data = ordersRes.data;
+        allOrders = [...allOrders, ...(data.results || data)];
+        nextPage = data.next;
+      }
+      totalOrders = allOrders.length;
+
+      // Fetch users (optional)
+      let totalUsers = 0;
+      try {
+        const usersRes = await authApiClient.get("/users/");
+        if (!usersRes.headers["content-type"]?.includes("application/json")) {
+          console.error("Non-JSON response from users:", usersRes.data);
+          throw new Error("Received non-JSON response from server");
+        }
+        totalUsers = (usersRes.data.results || usersRes.data).length;
+      } catch (error) {
+        console.error("Failed to fetch users:", error.message);
+        totalUsers = 0;
+      }
+
+      // Fetch reviews (optional)
+      let averageRating = 0;
+      try {
+        const reviewsRes = await authApiClient.get("/reviews/");
+        if (!reviewsRes.headers["content-type"]?.includes("application/json")) {
+          console.error("Non-JSON response from reviews:", reviewsRes.data);
+          throw new Error("Received non-JSON response from server");
+        }
+        const reviews = reviewsRes.data.results || reviewsRes.data;
+        averageRating =
+          reviews.length > 0
+            ? (reviews.reduce((sum, review) => sum + (review.rating || 0), 0) / reviews.length).toFixed(1)
+            : 0;
+      } catch (error) {
+        console.error("Failed to fetch reviews:", error.message);
+        averageRating = 0;
+      }
+
+      setStats({
+        totalServices,
+        totalOrders,
+        totalUsers,
+        averageRating,
+      });
+    } catch (error) {
+      console.error("Failed to fetch stats:", error.message);
+      setError("Failed to load dashboard data. Please try logging in again.");
+      if (error.response?.status === 401) {
+        localStorage.removeItem("authTokens");
+        window.location.href = "/login";
+      }
+    } finally {
+      setLoading(false);
+    }
+  };
+  fetchStats();
+}, [statusFilter]);
 
   return (
     <div className="dashboard-container">
