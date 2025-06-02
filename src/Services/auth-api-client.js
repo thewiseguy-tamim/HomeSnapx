@@ -1,8 +1,8 @@
 import axios from "axios";
 
 const authApiClient = axios.create({
-  baseURL: "https://household-service.vercel.app",
-  // baseURL: "http://127.0.0.1:8000/",
+  // baseURL: "https://household-service.vercel.app",
+  baseURL: "http://127.0.0.1:8000/",
 });
 
 export default authApiClient;
