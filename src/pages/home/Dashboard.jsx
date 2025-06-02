@@ -251,7 +251,7 @@ export default function Dashboard() {
         // Fetch users (optional)
         let totalUsers = 0;
         try {
-          const usersRes = await authApiClient.get("/api/users/");
+          const usersRes = await authApiClient.get("/users/");
           if (!usersRes.headers["content-type"]?.includes("application/json")) {
             console.error("Non-JSON response from users:", usersRes.data);
             throw new Error("Received non-JSON response from server");
@@ -265,7 +265,7 @@ export default function Dashboard() {
         // Fetch reviews (optional)
         let averageRating = 0;
         try {
-          const reviewsRes = await authApiClient.get("/api/reviews/");
+          const reviewsRes = await authApiClient.get("/reviews/");
           if (!reviewsRes.headers["content-type"]?.includes("application/json")) {
             console.error("Non-JSON response from reviews:", reviewsRes.data);
             throw new Error("Received non-JSON response from server");
