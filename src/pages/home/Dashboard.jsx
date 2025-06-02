@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
 import { FiPackage, FiShoppingCart, FiStar, FiUsers } from "react-icons/fi";
+import authApiClient from "../../Services/auth-api-client";
+
 
 // Add custom CSS for gradient backgrounds
 const customStyles = `
@@ -86,14 +88,14 @@ const Order = ({ statusFilter, setStatusFilter }) => {
       try {
         setLoading(true);
         let allOrders = [];
-        let nextPage = "/api/orders/";
-        if (statusFilter !== "all") {
-          nextPage += `?status=${statusFilter}`;
-        }
+        let nextPage = `/api/admin-orders/${statusFilter !== "all" ? `?status=${statusFilter}` : ""}`;
         while (nextPage) {
-          const response = await fetch(nextPage);
-          if (!response.ok) throw new Error("Failed to fetch orders");
-          const data = await response.json();
+          const response = await authApiClient.get(nextPage);
+          if (!response.headers["content-type"]?.includes("application/json")) {
+            console.error("Non-JSON response from admin-orders:", response.data);
+            throw new Error("Received non-JSON response from server");
+          }
+          const data = response.data;
           allOrders = [...allOrders, ...(data.results || data)];
           nextPage = data.next;
         }
@@ -103,8 +105,12 @@ const Order = ({ statusFilter, setStatusFilter }) => {
         );
         setOrders(sortedOrders);
       } catch (error) {
-        console.error("Failed to fetch orders:", error);
-        setError("Failed to load orders.");
+        console.error("Failed to fetch orders:", error.message);
+        setError("Failed to load orders. Please try logging in again.");
+        if (error.response?.status === 401) {
+          localStorage.removeItem("authTokens");
+          window.location.href = "/login";
+        }
       } finally {
         setLoading(false);
       }
@@ -223,49 +229,56 @@ export default function Dashboard() {
       try {
         setLoading(true);
 
-        // Fetch services
-        const servicesRes = await fetch("/api/services/");
-        if (!servicesRes.ok) throw new Error("Failed to fetch services");
-        const servicesData = await servicesRes.json();
-        const totalServices = (servicesData.results || servicesData).length;
+        // Skip /api/services/ due to 404 error
+        const totalServices = 0; // Replace with valid endpoint if needed
 
         // Fetch orders
         let totalOrders = 0;
         let allOrders = [];
-        let nextPage = "/api/orders/";
-        if (statusFilter !== "all") {
-          nextPage += `?status=${statusFilter}`;
-        }
+        let nextPage = `/api/admin-orders/${statusFilter !== "all" ? `?status=${statusFilter}` : ""}`;
         while (nextPage) {
-          const ordersRes = await fetch(nextPage);
-          if (!ordersRes.ok) throw new Error("Failed to fetch orders");
-          const data = await ordersRes.json();
+          const ordersRes = await authApiClient.get(nextPage);
+          if (!ordersRes.headers["content-type"]?.includes("application/json")) {
+            console.error("Non-JSON response from admin-orders:", ordersRes.data);
+            throw new Error("Received non-JSON response from server");
+          }
+          const data = ordersRes.data;
           allOrders = [...allOrders, ...(data.results || data)];
           nextPage = data.next;
         }
         totalOrders = allOrders.length;
 
-        // Fetch users
+        // Fetch users (optional)
         let totalUsers = 0;
         try {
-          const usersRes = await fetch("/api/users/");
-          if (!usersRes.ok) throw new Error("Failed to fetch users");
-          const usersData = await usersRes.json();
-          totalUsers = (usersData.results || usersData).length;
+          const usersRes = await authApiClient.get("/api/users/");
+          if (!usersRes.headers["content-type"]?.includes("application/json")) {
+            console.error("Non-JSON response from users:", usersRes.data);
+            throw new Error("Received non-JSON response from server");
+          }
+          totalUsers = (usersRes.data.results || usersRes.data).length;
         } catch (error) {
-          console.error("Failed to fetch users:", error);
-          totalUsers = 0; // Fallback to 0 if users endpoint fails
+          console.error("Failed to fetch users:", error.message);
+          totalUsers = 0;
         }
 
-        // Fetch reviews
-        const reviewsRes = await fetch("/api/reviews/");
-        if (!reviewsRes.ok) throw new Error("Failed to fetch reviews");
-        const reviewsData = await reviewsRes.json();
-        const reviews = reviewsData.results || reviewsData;
-        const averageRating =
-          reviews.length > 0
-            ? (reviews.reduce((sum, review) => sum + (review.rating || 0), 0) / reviews.length).toFixed(1)
-            : 0;
+        // Fetch reviews (optional)
+        let averageRating = 0;
+        try {
+          const reviewsRes = await authApiClient.get("/api/reviews/");
+          if (!reviewsRes.headers["content-type"]?.includes("application/json")) {
+            console.error("Non-JSON response from reviews:", reviewsRes.data);
+            throw new Error("Received non-JSON response from server");
+          }
+          const reviews = reviewsRes.data.results || reviewsRes.data;
+          averageRating =
+            reviews.length > 0
+              ? (reviews.reduce((sum, review) => sum + (review.rating || 0), 0) / reviews.length).toFixed(1)
+              : 0;
+        } catch (error) {
+          console.error("Failed to fetch reviews:", error.message);
+          averageRating = 0;
+        }
 
         setStats({
           totalServices,
@@ -274,8 +287,12 @@ export default function Dashboard() {
           averageRating,
         });
       } catch (error) {
-        console.error("Failed to fetch stats:", error);
-        setError("Failed to load dashboard data.");
+        console.error("Failed to fetch stats:", error.message);
+        setError("Failed to load dashboard data. Please try logging in again.");
+        if (error.response?.status === 401) {
+          localStorage.removeItem("authTokens");
+          window.location.href = "/login";
+        }
       } finally {
         setLoading(false);
       }
