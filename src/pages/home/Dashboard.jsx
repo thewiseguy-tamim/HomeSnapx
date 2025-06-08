@@ -3,7 +3,7 @@ import { FiPackage, FiShoppingCart, FiStar, FiUsers } from "react-icons/fi";
 import authApiClient from "../../Services/auth-api-client";
 
 
-// Add custom CSS for gradient backgrounds
+
 const customStyles = `
   .dashboard-container {
     background: linear-gradient(135deg, #f0f4ff 0%, #e0e7ff 50%, #c3dafe 100%);
