@@ -232,8 +232,8 @@ const Footer = () => {
                             </div>
 
                             {/* Company Links */}
-                            <div className="footer-section">
-                                <h6 className="section-title">Company</h6>
+                            <div className="footer-section mx-20">
+                                <h6 className="section-title text-while">Company</h6>
                                 <div>
                                     <Link to="/about" className="footer-link">About Us</Link>
                                     <Link to="/contact" className="footer-link">Contact</Link>
