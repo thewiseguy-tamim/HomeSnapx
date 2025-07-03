@@ -20,7 +20,7 @@ import UserReviews from "../components/Review/userReview";
 import ClientDashboard from "../pages/home/ClientDashboard";
 import AddService from "../components/Add Service/addService";
 import EditService from "../components/Add Service/EditService";
-import ServiceList from "../components/Add Service/ServiceList"; // Add this import
+import ServiceList from "../components/Add Service/ServiceList"; 
 import User from "../components/User";
 
 const AppRoutes = () => {

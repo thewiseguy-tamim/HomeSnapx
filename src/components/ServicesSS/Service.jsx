@@ -39,11 +39,11 @@ const Service = () => {
         {/* Navigation Tabs */}
         <div className="flex justify-center mb-12">
           <div className="flex">
-            <button
-              className="px-6 py-2 text-lg font-medium tracking-wide uppercase text-black border-b-2 border-black"
+            <h2
+              className="text-4xl md:text-5xl font-semibold text-primary mb-4 font-inter"
             >
               FEATURED
-            </button>
+            </h2>
           </div>
         </div>
 

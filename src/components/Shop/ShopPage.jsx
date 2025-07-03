@@ -37,14 +37,16 @@ const ShopPage = () => {
           handleSorting={setSortOrder}
         />
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {loading ? (
-            <p>Loading services...</p>
-          ) : (
-            services.map((service) => (
-              <ServiceItem key={service.id} service={service} />
-            ))
-          )}
-        </div>
+  {loading ? (
+    <div className="fixed inset-0 flex items-center justify-center bg-opacity-50 z-50">
+      <span className="loading loading-bars loading-xl"></span>
+    </div>
+  ) : (
+    services.map((service) => (
+      <ServiceItem key={service.id} service={service} />
+    ))
+  )}
+</div>
         <Pagination
           totalPages={totalPages}
           currentPage={currentPage}

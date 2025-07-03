@@ -73,9 +73,7 @@ const ServiceDetail = () => {
         backgroundAttachment: 'fixed'
       }}
     >
-      <div className="text-center bg-white/95 backdrop-blur-sm p-8 rounded-lg shadow-lg">
-        Loading...
-      </div>
+      <span className="loading loading-bars loading-xl"></span>
     </div>
   );
 

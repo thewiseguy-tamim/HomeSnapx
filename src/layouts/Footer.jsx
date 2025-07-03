@@ -1,5 +1,5 @@
 import React from 'react';
-import { Twitter, Youtube, Facebook, Mail, Phone, MapPin, ArrowRight, Heart } from 'lucide-react';
+import { Twitter, Youtube, Facebook, Mail, Phone, MapPin, ArrowRight } from 'lucide-react';
 import { Link } from 'react-router';
 
 const Footer = () => {
@@ -7,15 +7,14 @@ const Footer = () => {
         <>
             <style>
                 {`
-                    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+                    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
                     
-                    .footer-gradient {
-                        background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #334155 100%);
+                    .footer-container {
+                        background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
                         position: relative;
-                        overflow: hidden;
                     }
                     
-                    .footer-gradient::before {
+                    .footer-container::before {
                         content: '';
                         position: absolute;
                         top: 0;
@@ -23,8 +22,8 @@ const Footer = () => {
                         right: 0;
                         bottom: 0;
                         background: 
-                            radial-gradient(circle at 20% 20%, rgba(59, 130, 246, 0.1) 0%, transparent 50%),
-                            radial-gradient(circle at 80% 80%, rgba(124, 58, 237, 0.1) 0%, transparent 50%);
+                            radial-gradient(circle at 30% 40%, rgba(59, 130, 246, 0.08) 0%, transparent 50%),
+                            radial-gradient(circle at 70% 60%, rgba(139, 69, 193, 0.08) 0%, transparent 50%);
                         pointer-events: none;
                     }
                     
@@ -34,311 +33,239 @@ const Footer = () => {
                     }
                     
                     .footer-section {
-                        backdrop-filter: blur(10px);
-                        background: rgba(255, 255, 255, 0.05);
-                        border: 1px solid rgba(255, 255, 255, 0.1);
-                        border-radius: 16px;
-                        padding: 2rem;
-                        transition: all 0.3s ease;
-                        height: 100%;
+                        padding: 0;
                     }
                     
-                    .footer-section:hover {
-                        transform: translateY(-4px);
-                        background: rgba(255, 255, 255, 0.08);
-                        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
-                    }
-                    
-                    .footer-title {
-                        background: linear-gradient(135deg, #3b82f6, #60a5fa);
+                    .brand-title {
+                        font-size: 1.875rem;
+                        font-weight: 700;
+                        background: linear-gradient(135deg, #3b82f6, #8b5cf6);
                         -webkit-background-clip: text;
                         background-clip: text;
                         -webkit-text-fill-color: transparent;
-                        font-weight: 700;
-                        font-size: 1.125rem;
-                        margin-bottom: 1.5rem;
-                        position: relative;
+                        margin-bottom: 0.75rem;
                     }
                     
-                    .footer-title::after {
-                        content: '';
-                        position: absolute;
-                        bottom: -8px;
-                        left: 0;
-                        width: 40px;
-                        height: 3px;
-                        background: linear-gradient(90deg, #3b82f6, #7c3aed);
-                        border-radius: 2px;
+                    .brand-description {
+                        color: #94a3b8;
+                        font-size: 0.875rem;
+                        line-height: 1.6;
+                        margin-bottom: 1.5rem;
+                    }
+                    
+                    .section-title {
+                        color: #e2e8f0;
+                        font-weight: 600;
+                        font-size: 1rem;
+                        margin-bottom: 1rem;
                     }
                     
                     .footer-link {
-                        color: rgba(255, 255, 255, 0.8);
+                        color: #94a3b8;
                         text-decoration: none;
-                        font-weight: 400;
-                        transition: all 0.3s ease;
-                        display: flex;
-                        align-items: center;
+                        font-size: 0.875rem;
                         padding: 0.5rem 0;
-                        border-radius: 8px;
-                        padding-left: 0.5rem;
-                        margin-left: -0.5rem;
+                        display: block;
+                        transition: all 0.2s ease;
+                        position: relative;
                     }
                     
                     .footer-link:hover {
                         color: #60a5fa;
-                        transform: translateX(8px);
-                        background: rgba(59, 130, 246, 0.1);
-                        padding-left: 1rem;
+                        padding-left: 0.75rem;
                     }
                     
                     .footer-link::before {
                         content: '';
-                        width: 4px;
-                        height: 4px;
+                        position: absolute;
+                        left: 0;
+                        top: 50%;
+                        transform: translateY(-50%);
+                        width: 0;
+                        height: 1px;
                         background: #3b82f6;
-                        border-radius: 50%;
-                        margin-right: 0.75rem;
-                        opacity: 0;
-                        transition: opacity 0.3s ease;
+                        transition: width 0.2s ease;
                     }
                     
                     .footer-link:hover::before {
-                        opacity: 1;
+                        width: 0.5rem;
                     }
                     
-                    .social-icon {
-                        background: rgba(255, 255, 255, 0.1);
-                        border: 1px solid rgba(255, 255, 255, 0.2);
-                        border-radius: 12px;
-                        padding: 12px;
-                        color: rgba(255, 255, 255, 0.8);
-                        transition: all 0.3s ease;
-                        backdrop-filter: blur(10px);
+                    .contact-info {
+                        display: flex;
+                        align-items: center;
+                        gap: 0.75rem;
+                        color: #94a3b8;
+                        font-size: 0.875rem;
+                        margin-bottom: 0.75rem;
+                        transition: color 0.2s ease;
                     }
                     
-                    .social-icon:hover {
-                        background: linear-gradient(135deg, #3b82f6, #7c3aed);
-                        color: white;
-                        transform: translateY(-4px) scale(1.1);
-                        box-shadow: 0 12px 24px rgba(59, 130, 246, 0.3);
-                        border-color: transparent;
+                    .contact-info:hover {
+                        color: #cbd5e1;
+                    }
+                    
+                    .contact-icon {
+                        color: #3b82f6;
+                        flex-shrink: 0;
+                    }
+                    
+                    .newsletter-section {
+                        margin-bottom: 1.5rem;
                     }
                     
                     .newsletter-input {
-                        background: rgba(255, 255, 255, 0.1);
-                        border: 1px solid rgba(255, 255, 255, 0.2);
-                        border-radius: 12px;
-                        padding: 1rem;
-                        color: white;
                         width: 100%;
-                        backdrop-filter: blur(10px);
-                        transition: all 0.3s ease;
+                        padding: 0.75rem 1rem;
+                        background: rgba(255, 255, 255, 0.05);
+                        border: 1px solid rgba(255, 255, 255, 0.1);
+                        border-radius: 8px;
+                        color: #e2e8f0;
+                        font-size: 0.875rem;
+                        transition: all 0.2s ease;
+                        margin-bottom: 0.75rem;
                     }
                     
                     .newsletter-input:focus {
                         outline: none;
                         border-color: #3b82f6;
-                        background: rgba(255, 255, 255, 0.15);
-                        box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+                        background: rgba(255, 255, 255, 0.08);
+                        box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
                     }
                     
                     .newsletter-input::placeholder {
-                        color: rgba(255, 255, 255, 0.6);
+                        color: #64748b;
                     }
                     
                     .newsletter-btn {
+                        width: 100%;
+                        padding: 0.75rem 1rem;
                         background: linear-gradient(135deg, #3b82f6, #1d4ed8);
                         border: none;
+                        border-radius: 8px;
                         color: white;
-                        padding: 1rem 1.5rem;
-                        border-radius: 12px;
-                        font-weight: 600;
-                        transition: all 0.3s ease;
+                        font-weight: 500;
+                        font-size: 0.875rem;
+                        cursor: pointer;
+                        transition: all 0.2s ease;
                         display: flex;
                         align-items: center;
-                        gap: 0.5rem;
-                        margin-top: 1rem;
-                        width: 100%;
                         justify-content: center;
+                        gap: 0.5rem;
                     }
                     
                     .newsletter-btn:hover {
-                        transform: translateY(-2px);
-                        box-shadow: 0 12px 24px rgba(59, 130, 246, 0.4);
-                        background: linear-gradient(135deg, #1d4ed8, #1e40af);
+                        transform: translateY(-1px);
+                        box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
                     }
                     
-                    .logo-footer {
-                        background: linear-gradient(135deg, #3b82f6, #1d4ed8, #7c3aed);
-                        -webkit-background-clip: text;
-                        background-clip: text;
-                        -webkit-text-fill-color: transparent;
-                        font-weight: 800;
-                        font-size: 2rem;
-                        letter-spacing: -0.025em;
-                        margin-bottom: 1rem;
+                    .social-links {
+                        display: flex;
+                        gap: 0.75rem;
+                        margin-top: 1rem;
                     }
                     
-                    .contact-item {
+                    .social-icon {
                         display: flex;
                         align-items: center;
-                        gap: 0.75rem;
-                        color: rgba(255, 255, 255, 0.8);
-                        margin-bottom: 1rem;
-                        transition: all 0.3s ease;
-                        padding: 0.5rem;
+                        justify-content: center;
+                        width: 2.5rem;
+                        height: 2.5rem;
+                        background: rgba(255, 255, 255, 0.05);
                         border-radius: 8px;
+                        color: #94a3b8;
+                        transition: all 0.2s ease;
+                        text-decoration: none;
                     }
                     
-                    .contact-item:hover {
-                        color: #60a5fa;
+                    .social-icon:hover {
                         background: rgba(59, 130, 246, 0.1);
-                        transform: translateX(4px);
-                    }
-                    
-                    .contact-icon {
-                        background: rgba(59, 130, 246, 0.2);
-                        border-radius: 8px;
-                        padding: 8px;
                         color: #60a5fa;
+                        transform: translateY(-2px);
                     }
                     
-                    .bottom-bar {
+                    .footer-bottom {
                         border-top: 1px solid rgba(255, 255, 255, 0.1);
-                        backdrop-filter: blur(10px);
-                        background: rgba(0, 0, 0, 0.3);
+                        padding: 1.5rem 0;
+                        text-align: center;
+                        color: #64748b;
+                        font-size: 0.875rem;
                     }
                     
-                    .heart-icon {
-                        color: #ef4444;
-                        animation: heartbeat 2s infinite;
-                    }
-                    
-                    @keyframes heartbeat {
-                        0%, 100% { transform: scale(1); }
-                        50% { transform: scale(1.1); }
-                    }
-                    
-                    .service-grid {
-                        display: grid;
-                        gap: 0.75rem;
+                    .divider {
+                        width: 100%;
+                        height: 1px;
+                        background: linear-gradient(90deg, transparent, rgba(59, 130, 246, 0.3), transparent);
+                        margin: 2rem 0;
                     }
                 `}
             </style>
 
-            <footer className="footer-gradient text-white">
+            <footer className="footer-container text-white font-inter">
                 <div className="footer-content">
-                    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                    <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 lg:gap-12">
                             
                             {/* Company Info */}
                             <div className="footer-section">
-                                <div className="logo-footer font-inter">
-                                    HomeSnap
-                                </div>
-                                <p className="text-slate-300 mb-6 leading-relaxed">
-                                    Transform your home with our premium professional services. Quality craftsmanship, reliable service, guaranteed satisfaction.
+                                <div className="brand-title">HomeSnap</div>
+                                <p className="brand-description">
+                                    Transform your home with our premium professional services. Quality craftsmanship and reliable service guaranteed.
                                 </p>
                                 
-                                <div className="space-y-2">
-                                    <div className="contact-item">
-                                        <div className="contact-icon">
-                                            <Phone size={16} />
-                                        </div>
-                                        <span className="text-sm">(+880) 190-200-1000</span>
+                                <div className="space-y-1">
+                                    <div className="contact-info">
+                                        <Phone className="contact-icon" size={16} />
+                                        <span>(+880) 190-200-1000</span>
                                     </div>
                                     
-                                    <div className="contact-item">
-                                        <div className="contact-icon">
-                                            <Mail size={16} />
-                                        </div>
-                                        <span className="text-sm">support@homesnap.com</span>
+                                    <div className="contact-info">
+                                        <Mail className="contact-icon" size={16} />
+                                        <span>support@homesnap.com</span>
                                     </div>
                                     
-                                    <div className="contact-item">
-                                        <div className="contact-icon">
-                                            <MapPin size={16} />
-                                        </div>
-                                        <span className="text-sm">Mirpur, Dhaka-1216</span>
+                                    <div className="contact-info">
+                                        <MapPin className="contact-icon" size={16} />
+                                        <span>Mirpur, Dhaka-1216</span>
                                     </div>
                                 </div>
                             </div>
 
-                            {/* Services */}
-                            <div className="footer-section">
-                                <h6 className="footer-title font-inter">Our Services</h6>
-                                <div className="service-grid">
-                                    <a href="#" className="footer-link font-inter">Home Cleaning</a>
-                                    <a href="#" className="footer-link font-inter">Carpentry & Repair</a>
-                                    <a href="#" className="footer-link font-inter">Interior Painting</a>
-                                    <a href="#" className="footer-link font-inter">Plumbing Services</a>
-                                    <a href="#" className="footer-link font-inter">Electrical Work</a>
-                                    <a href="#" className="footer-link font-inter">Garden Maintenance</a>
-                                </div>
-                            </div>
-
-                            {/* Company */}
-                            <div className="footer-section">
-                                <h6 className="footer-title font-inter">Company</h6>
-                                <div className="service-grid">
-                                    <Link to="/about" className="footer-link font-inter">About Us</Link>
-                                    <a href="#" className="footer-link font-inter">Our Team</a>
-                                    <a href="#" className="footer-link font-inter">Careers</a>
-                                    <Link to="/contact" className="footer-link font-inter">Contact</Link>
-                                    <a href="#" className="footer-link font-inter">Privacy Policy</a>
-                                    <a href="#" className="footer-link font-inter">Terms of Service</a>
+                            {/* Company Links */}
+                            <div className="footer-section mx-20">
+                                <h6 className="section-title">Company</h6>
+                                <div>
+                                    <Link to="/about" className="footer-link">About Us</Link>
+                                    <Link to="/contact" className="footer-link">Contact</Link>
+                                    
                                 </div>
                             </div>
 
                             {/* Newsletter & Social */}
                             <div className="footer-section">
-                                <h6 className="footer-title font-inter">Stay Connected</h6>
-                                <p className="text-slate-300 mb-4 text-sm leading-relaxed">
-                                    Subscribe to get updates on our latest services and special offers.
-                                </p>
+                                <h6 className="section-title">Stay Connected</h6>
                                 
-                                <div className="mb-6">
+                                <div className="newsletter-section">
                                     <input 
                                         type="email" 
                                         placeholder="Enter your email" 
-                                        className="newsletter-input font-inter"
+                                        className="newsletter-input"
                                     />
-                                    <button className="newsletter-btn font-inter">
+                                    <button className="newsletter-btn">
                                         Subscribe
                                         <ArrowRight size={16} />
                                     </button>
                                 </div>
                                 
-                                <div className="space-y-4">
-                                    <div className="text-slate-300 text-sm font-medium">Follow Us</div>
-                                    <div className="flex gap-3">
-                                        <a href="#" className="social-icon">
-                                            <Facebook size={20} />
-                                        </a>
-                                        <a href="#" className="social-icon">
-                                            <Twitter size={20} />
-                                        </a>
-                                        <a href="#" className="social-icon">
-                                            <Youtube size={20} />
-                                        </a>
-                                    </div>
-                                </div>
+                                
                             </div>
                         </div>
-                    </div>
+                        
+                        <div className="divider"></div>
+                        
 
-                    {/* Bottom Bar */}
-                    <div className="bottom-bar">
-                        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-                            <div className="flex flex-col md:flex-row justify-between items-center gap-4">
-                                <div className="text-slate-400 text-sm font-inter">
-                                    © 2025 HomeSnap. All rights reserved.
-                                </div>
-                                <div className="flex items-center gap-1 text-slate-400 text-sm font-inter">
-                                    Made with <Heart size={16} className="heart-icon" /> by Tamim Islam
-                                </div>
-                            </div>
-                        </div>
+                        <div className="flex justify-center">© 2025 HomeSnap. All rights reserved.</div>
+                       
                     </div>
                 </div>
             </footer>
