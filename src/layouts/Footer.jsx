@@ -232,7 +232,7 @@ const Footer = () => {
                             </div>
 
                             {/* Company Links */}
-                            <div className="footer-section mx-20">
+                            <div className="footer-section">
                                 <h6 className="section-title">Company</h6>
                                 <div>
                                     <Link to="/about" className="footer-link">About Us</Link>
